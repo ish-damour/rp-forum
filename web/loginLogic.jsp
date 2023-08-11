@@ -12,7 +12,7 @@ try{
     <%@ include file="connections.jsp" %>
     <%
         
-  PreparedStatement psSelect = conn.prepareStatement("select * from user where email = ? and password = ? ");
+  PreparedStatement psSelect = conn.prepareStatement("select * from users where email = ? and password = ? ");
  
   psSelect.setString(1, email);
   psSelect.setString(2, password);  
@@ -21,13 +21,13 @@ try{
   
   if(resultSet.next()){
   
-   String loggedId = resultSet.getString("id");   
-   String loggedname = resultSet.getString("names");
+   String loggedemail = resultSet.getString("email");   
+   String loggedname = resultSet.getString("username");
 
-   session.setAttribute("loggedUser", loggedId);
-    session.setAttribute("loggedId", loggedname);
+   session.setAttribute("loggedemail", loggedemail);
+    session.setAttribute("loggedname", loggedname);
    
-   response.sendRedirect("dashboard.jsp");
+   response.sendRedirect("index.jsp");
     
     }
     else{
