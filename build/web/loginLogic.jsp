@@ -3,10 +3,8 @@
 <%@page import="java.sql.*" %>
 
 <%
-
 String email = request.getParameter("email");
 String password = request.getParameter("password");
-
 try{
     %> 
     <%@ include file="connections.jsp" %>
@@ -31,7 +29,8 @@ try{
     
     }
     else{
-    out.println("failed to log in");
+    %>
+<%
     }
     
     }catch(Exception e){

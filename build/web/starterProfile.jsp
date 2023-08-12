@@ -7,7 +7,11 @@
                 </div>
                 <div class="mt-1">
                     <div class="flex flex-column">
-                        <div>Admin</div>
+                        <div><% 
+                            String mail=(String)session.getAttribute("loggedemail"); 
+                            String name=(String)session.getAttribute("loggedname"); 
+                            out.print(name);
+                           %></div>
                         <div >
                             <a href="">Edit</a>
                         </div>

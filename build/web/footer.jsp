@@ -1,5 +1,5 @@
    <footer class="text-center">
-    <p>© 2023 forum. All rights reserved.</p>
+    <p>© 2023 RP-forum. All rights reserved.</p>
   </footer>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
