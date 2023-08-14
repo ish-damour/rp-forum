@@ -22,51 +22,56 @@
 					</div>
 				<div class="col-lg-12 logined  mt-3">
 			<button type="submit" name="login" class="btn btn-primary form-control">Sign in</button>
-		</div>
+                    </div>
 		</form>
-              <%
-String email = request.getParameter("email");
-String password = request.getParameter("password");
-try{
-    %> 
-    <%@ include file="connections.jsp" %>
-    <%
-   if (email!=null &&password !=null) {      
-  PreparedStatement psSelect = conn.prepareStatement("select * from users where email = ? and password = ? ");
- 
-  psSelect.setString(1, email);
-  psSelect.setString(2, password);  
-  
-  ResultSet resultSet = psSelect.executeQuery();
-  
-  if(resultSet.next()){
-  
-   String loggedemail = resultSet.getString("email");   
-   String loggedname = resultSet.getString("username");
+             <% 
+                   if ("POST".equals(request.getMethod())) {
+                   
+                       String email = request.getParameter("email");
+                      String password = request.getParameter("password");
+                      try{
+                          %> 
+                          <%@ include file="connections.jsp" %>
+                          <%
+                         if (email!=null &&password !=null) {      
+                            PreparedStatement psSelect = conn.prepareStatement("select * from users where email = ? and password = ? ");
 
-   session.setAttribute("loggedemail", loggedemail);
-    session.setAttribute("loggedname", loggedname);
-   
-   response.sendRedirect("index.jsp");
-    
-    }
-    else{
-    message = "<p class='alert alert-danger text-center'><strong>Invalid username/email or password</strong></p>";
-    %>
-<%
-    }
-    
-} }catch(Exception e){
-    out.print(e);
-    }
+                            psSelect.setString(1, email);
+                            psSelect.setString(2, password);  
 
-%>
-<div class="col-lg-12 mt-3 logined btn"><%= message %></div>
+                            ResultSet resultSet = psSelect.executeQuery();
+
+                            if(resultSet.next()){
+                                int loggedid=resultSet.getInt("user_id");
+                                String loggedemail = resultSet.getString("email");   
+                                String loggedname = resultSet.getString("username");
+
+                                session.setAttribute("loggedemail", loggedemail);
+                                 session.setAttribute("loggedname", loggedname);
+                                 session.setAttribute("loggedid", loggedid);
+
+                                response.sendRedirect("index.jsp");
+
+                          }
+                          else{ 
+                          message = "<p class='alert alert-danger text-center'><strong>Invalid username/email or password</strong></p>";
+                          
+                            
+                                  }
+                              }
+                              
+                             }catch(Exception e){
+                                out.print(e);
+
+                           }
+                    }
+            %>
+            <div class="col-lg-12 mt-3 logined btn"><%= message %></div>
 
           </div>
-            	<div class="col-lg-12 mt-3 containered rounded shadow-sm text-center p-3 text-muted">
-		Don't you have in RP-forum? <a href="signup.jsp" class="mr-1">Create an account </a>.
-		</div>
+        <div class="col-lg-12 mt-3 containered rounded shadow-sm text-center p-3 text-muted">
+        Don't you have in RP-forum? <a href="signup.jsp" class="mr-1">Create an account </a>.
+        </div>
         </div>
       </div>
     </div>

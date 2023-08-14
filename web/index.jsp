@@ -1,15 +1,19 @@
 <%@ include file= "header.jsp"%>
 <%@ include file= "nav.jsp"%>
   <main class="container"> 
-  <div class="row g-5"> 
-    <div class="col-md-4">
-      <div class="position-sticky" style=";top: 8rem;" >
-        <div class="p-1">
-            <%@ include file= "NewPost.jsp"%>
-        </div> 
-      </div>
-    </div>
-      
+  <div class="row g-5 justify-content-center"> 
+     <%  
+        String nameCheck=(String)session.getAttribute("loggedname");
+        if(nameCheck != null){
+        %>
+        <div class="col-md-4">
+          <div class="position-sticky" style=";top: 8rem;" >
+            <div class="p-1">
+                <%@ include file= "NewPost.jsp"%>
+            </div> 
+          </div>
+        </div>
+      <% }%>
     <div class="col-md-8">
         <div class="row justify-content-center">
             <div class="col-lg-12">

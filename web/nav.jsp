@@ -47,8 +47,8 @@
 
   <div class="nav-scroller py-1 mb-3">
     <nav class="nav nav-underline flex flex-row justify-content-around ">
-      <a class="nav-item nav-link link-body-emphasis active " href="#">Home</a>
-      <a class="nav-item nav-link link-body-emphasis" href="#">Explore</a>
+      <a class="nav-item nav-link link-body-emphasis active " href="index.jsp">Home</a>
+      <a class="nav-item nav-link link-body-emphasis" href="UsersList.jsp">Explore</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Trends</a>
       <a class="nav-item nav-link link-body-emphasis" href="#">Saved</a> 
     </nav>
