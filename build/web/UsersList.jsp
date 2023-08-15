@@ -1,70 +1,97 @@
+<%
+if(session.getAttribute("loggedid").equals(null)){
+response.sendRedirect("login.jsp");
+    }else{
+    
+    }
+%>
 <%@ include file= "header.jsp"%>
 <%@ include file= "nav.jsp"%>
   <main class="container"> 
-  <div class="row g-5 justify-content-center">  
+  <div class="row justify-content-center">  
+      <div class="col-lg-4">
+          <%@ include file="NewPost.jsp"%>
+      </div>
     <div class="col-md-8">
         <div class="row justify-content-center"> 
-            <div class="col-lg-8"> 
+            <div class="col-lg-12 "> 
                
- <%@ include file="connections.jsp" %>
-<%
-try {
-    int logid = (int) session.getAttribute("loggedid");
-    PreparedStatement psSelect = conn.prepareStatement("SELECT * FROM users WHERE user_id != ?");
-    psSelect.setInt(1, logid);
-    ResultSet resultSet = psSelect.executeQuery();
+                <%@ include file="connections.jsp" %>
+               <%
+               try {
+                   int logid = (int) session.getAttribute("loggedid");
+                   PreparedStatement psSelect = conn.prepareStatement("SELECT * FROM users WHERE user_id != ?");
+                   psSelect.setInt(1, logid);
+                   ResultSet resultSet = psSelect.executeQuery();
 
-    while (resultSet.next()) {
-        String usernam = resultSet.getString("username");
-        int followingid = resultSet.getInt("user_id");
+                   while (resultSet.next()) {
+                       String usernam = resultSet.getString("username");
+                       int followeduser = resultSet.getInt("user_id");
 
-        PreparedStatement psSelectfollow = conn.prepareStatement("SELECT * FROM follow WHERE follower_id = ? AND following_id = ?");
-        psSelectfollow.setInt(1, logid);
-        psSelectfollow.setInt(2, followingid);
-        ResultSet resultSetfollow = psSelectfollow.executeQuery();
+                       PreparedStatement psSelectfollow = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ?");
+                       psSelectfollow.setInt(1, followeduser);
+                       psSelectfollow.setInt(2, logid);
+                       ResultSet resultSetfollow = psSelectfollow.executeQuery();
 
-        boolean isFollowing = resultSetfollow.next(); // Check if the user is already following
-
-%>
-        <div class="flex-fill d-flex flex-row gap-3 mt-3 mb-2">
-            <div class="col-lg-12">
-                <form method="post" action="#">
-                <button class="btn btn-sm btn-default" type="submit" name="profils">
-                    <div class="d-flex align-items-center col-lg-10"> <!-- Use flexbox to align items horizontally -->
-                        <div class="mr-2"> <!-- Add margin to separate the image from the text -->
-                            <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="40px" height="40px">
-                        </div>
-                        <div class="m-2 col-lg-2"><%= usernam %></div>
-                    </div>
-                </button></form>
-            </div>
-            <div class="mt-1  flex-fill">
-                <div class="d-flex flex-row ">
-                    <div><form method="post" action="followunfollow.jsp">
-                        <% if (isFollowing) { %>
-                        <input type="hidden" value="<%=followingid %>" name="followingidi">
-                        <button class="btn btn-sm btn-secondary" type="submit" name="unfollow">Unfollow</button>
-                        <% } else { %>
-                        <input type="hidden" value="<%=followingid %>" name="followingidi">
-                        <button class="btn btn-sm btn-secondary" type="submit"name="follow">Follow</button>
-                        <% } %>
-                    </form></div>
-                </div>
-            </div>
+                    %>
+                    <%--<%@include file="userCard"%>--%>
+<div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-2">
+    <div class="d-flex">
+        <!-- Left side: User image and username -->
+        <div class="mr-2">
+            <!-- User image -->
+            <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="40px" height="40px">
         </div>
-<%
-    }
+        <div class="mr-3">
+            <!-- Username -->
+            <%= usernam %>
+        </div>
+    </div>
+    
+    <!-- Right side: Follow/Unfollow button -->
+    <form method="post" action="followlogic.jsp">
+        <%
+            // Check if the user is already following the person
+            PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ? AND followed = ?");
+            psSelectl.setInt(1, followeduser);
+            psSelectl.setInt(2, logid);  
+            psSelectl.setInt(3, 1);  
+            ResultSet resultSetl = psSelectl.executeQuery();
+        
+            if (resultSetl.next()) {
+                int followed_id = resultSetl.getInt("following_id");
+        %>
+            <div>
+                <!-- Unfollow button -->
+                <input type="hidden" value="<%= followed_id %>" name="followingidi">
+                <button class="btn btn-sm btn-secondary" type="submit" name="unfollow">Unfollow</button>
+            </div>
+        <%
+            } else {
+        %>
+            <div>
+                <!-- Follow button -->
+                <input type="hidden" value="<%=followeduser%>" name="followingidi">
+                <button class="btn btn-sm btn-secondary" type="submit" name="follow">Follow</button>
+            </div>
+        <%
+            }
+        %>
+    </form>
+</div>
 
-    resultSet.close();
-    psSelect.close();
-} catch (Exception e) {
-    out.print(e);
-}
-%>
+                    <%
+                        }
+
+                        resultSet.close();
+                        psSelect.close();
+                    } catch (Exception e) {
+                        out.print(e);
+                    }
+                    %>
 
         </div> 
-    </div> 
+        </div> 
+    </div>
   </div>
-
-</main>
-            <%@ include file="footer.jsp" %>
+</main> 

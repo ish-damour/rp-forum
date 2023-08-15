@@ -19,6 +19,7 @@
                 </div>
             </div>
             <div class="d-flex gap-3 justify-content-around">
+                
                 <div>
                    0 Followers
                 </div>

@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 import javax.servlet.http.Part;
 
 @WebServlet("/UploadImage")
-@MultipartConfig(maxFileSize=16177216)
+@MultipartConfig(maxFileSize = 20 * 1024 * 1024) // Max size set to 20MB
 public class UploadImage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,13 +32,14 @@ public class UploadImage extends HttpServlet {
        
             Part imagePart = request.getPart("imageFile");
             InputStream imageStream = imagePart.getInputStream();
-
-            PreparedStatement psInsert = conn.prepareStatement("INSERT INTO blogs (user_id,title,content,image_name, image_data) VALUES (?,?,?,?,?)");
+            int like=0;
+            PreparedStatement psInsert = conn.prepareStatement("INSERT INTO blogs (user_id,title,content,image_name, image_data,likeshas) VALUES (?,?,?,?,?,?)");
             psInsert.setInt(1, logid);
             psInsert.setString(2,title);
             psInsert.setString(3, descrption);           
             psInsert.setString(4, imagePart.getSubmittedFileName());
             psInsert.setBlob(5, imageStream);
+            psInsert.setInt(6,0 );
 
             psInsert.executeUpdate();
             response.sendRedirect("createNewPost.jsp");
