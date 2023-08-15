@@ -1,5 +1,6 @@
 <%@ include file= "header.jsp"%>
-<%@ include file= "nav.jsp"%>
+<%@ include file= "nav.jsp"%> 
+ 
   <main class="container"> 
   <div class="row g-5 justify-content-center"> 
      <%  
@@ -22,7 +23,7 @@
                     <a class="btn btn-sm btn-outline-secondary rounded-pill" href="#">28-jan</a> 
                 </nav> 
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-12"> 
                <%@include file="posts.jsp" %> 
             </div>
         </div> 

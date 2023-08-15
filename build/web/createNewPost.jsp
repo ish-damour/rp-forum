@@ -8,8 +8,7 @@
                 </div>
             </div>
         <div class="col-lg-6">
-           
-            <form class="row gap-3" method="POST" action="bloglogic.jsp">
+           <form action="UploadImage" method="post" action="UploadImage" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="location" class="form-label">Title</label>
                     <input type="text" class="form-control" name="title" id="Title" placeholder="Title">
@@ -19,7 +18,8 @@
                     <textarea class="form-control" id="Write description"name="content" rows="4" placeholder="Write description"></textarea>
                   </div> 
                 <div class="mb-3">
-                    <input class="custom-file-input" type="file">
+                        
+             <input type="file" name="imageFile" accept="image/*">
                   </div> 
                 <div class="mb-3">
                     <button type="submit" class="w-100 btn btn-block btn-secondary" name="upload">save post</button>
