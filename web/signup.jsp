@@ -32,8 +32,8 @@
                 else{
                     if(Password.equals(C_Password)) {
                         PreparedStatement psInsert = conn.prepareStatement("insert into users "
-                        + "(`lname`,`fname`,`college`,`username`,`email`,`password`) "
-                        + "values(?,?,?,?,?,?)");
+                        + "(`lname`,`fname`,`college`,`username`,`email`,`password`,`followers`) "
+                        + "values(?,?,?,?,?,?,?)");
 
                        psInsert.setString(1,lname);
                        psInsert.setString(2,fname);                      
@@ -41,7 +41,8 @@
                        psInsert.setString(4,username);      
 ;                      psInsert.setString(5,email);   
                        psInsert.setString(6,Password); 
-
+                       psInsert.setString(6,Password);
+                        psInsert.setString(7,"0");
                         psInsert.execute(); 
 
                         response.sendRedirect("login.jsp");

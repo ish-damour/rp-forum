@@ -17,13 +17,15 @@
     <title>RP FORUM</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/blog/">
-
+    <link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="fontawesome/css/all.min.css">
     
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
 <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="styles/style.css" rel="stylesheet">
+
 
     <style>
       .bd-placeholder-img {
@@ -104,6 +106,7 @@
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="blog.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="fontawesome-free-5.15.4-web/css/all.min.css">
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">

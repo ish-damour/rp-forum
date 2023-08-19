@@ -6,8 +6,9 @@
     if (session.getAttribute("loggedid") == null) {
         response.sendRedirect("login.jsp");
     } else {
-//        String user_identity = (String) session.getAttribute("loggedid");
-//        String username = (String) session.getAttribute("loggedname");
-//        out.print("bbbbbbbbbbbbbbb");
+    %>
+<%
+
+        
 }
 %>

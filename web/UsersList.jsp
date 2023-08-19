@@ -1,22 +1,17 @@
-<%
-if(session.getAttribute("loggedid").equals(null)){
-response.sendRedirect("login.jsp");
-    }else{
-    
-    }
-%>
+<%@include file="loginblocker.jsp" %>  
 <%@ include file= "header.jsp"%>
 <%@ include file= "nav.jsp"%>
   <main class="container"> 
   <div class="row justify-content-center">  
       <div class="col-lg-4">
-          <%@ include file="NewPost.jsp"%>
+          <%@ include file="starterProfile.jsp"%>
+
       </div>
     <div class="col-md-8">
         <div class="row justify-content-center"> 
             <div class="col-lg-12 "> 
                
-                <%@ include file="connections.jsp" %>
+
                <%
                try {
                    int logid = (int) session.getAttribute("loggedid");

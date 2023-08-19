@@ -6,7 +6,9 @@
             <div class="d-flex flex-row ">
                 <%
                     String loggednam=(String)session.getAttribute("loggedname"); %>
-                <div class="flex-fill"><%=loggednam %></div> 
+                <div class="flex-fill">
+                    hhhh
+                    </div> 
                 <div><button class="btn btn-sm btn-secondary">Follow</button></div>  
             </div>
         </div>

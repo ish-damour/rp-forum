@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <div class="position-sticky" style="top: 8rem;">
                 <div class="p-1">
-                    <%@ include file= "NewPost.jsp" %>
+                    <%@ include file= "starterProfile.jsp" %>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                     </nav>
                 </div>
                 <div class="col-lg-12">
-                    <%@ include file="posts.jsp" %>
+                    <%@ include file="post.jsp" %>
                 </div>
             </div>
         </div>

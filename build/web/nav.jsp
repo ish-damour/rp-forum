@@ -33,8 +33,15 @@
              <a class="btn btn-sm text-decoration-underline " href="login.jsp">Login</a>
             <%
               }else{
-              %>
-              <a class="btn btn-sm text-decoration-underline " href="login.jsp"> <%= nameDisplay %></a>
+            %>   
+        <div class="d-flex align-items-center">
+            
+            <form method="post"> 
+                <button class="btn btn-sm" name="out"><strong><img class="link-secondary mr-1" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px"> <%= nameDisplay %></strong></button>
+            </form>
+        </div>
+
+
              <%
 
                 }

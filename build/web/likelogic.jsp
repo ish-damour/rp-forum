@@ -43,7 +43,11 @@ try{
                             int rowaffect = paddlike.executeUpdate();
                             
                             if (rowaffect > 0) {
-                                response.sendRedirect("index.jsp");
+                   PreparedStatement mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
+                                    mofierlike.setString(1,blog_id);
+                            int affectedmodi = mofierlike.executeUpdate();
+                            session.setAttribute("blogliked",blog_id);
+                                response.sendRedirect("modifier.jsp");
                             } else {
                                 out.print("Error while updating likes in the blogs table");
                             }
@@ -74,7 +78,15 @@ try{
                             int rowaffect = paddlike.executeUpdate();
                             
                             if (rowaffect > 0) {
-                                response.sendRedirect("index.jsp");
+                                String previousPage = request.getParameter("previousPage");
+                                if (previousPage != null) {
+                     PreparedStatement mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
+                        mofierlike.setString(1,blog_id);
+                            int affectedmodi = mofierlike.executeUpdate();
+                            session.setAttribute("blogliked",blog_id);
+                                   response.sendRedirect("modifier.jsp");
+                                }
+//                                response.sendRedirect("index.jsp");
                             } else {
                                 out.print("Error while updating likes in the blogs table");
                             }
@@ -109,7 +121,15 @@ try{
                     int rowsAffected = psUpdateLikes.executeUpdate();
 
                     if (rowsAffected > 0) {
-                        out.print("Liked successfully!");
+                      String previousPage = request.getParameter("previousPage");
+                                if (previousPage != null) {
+                     PreparedStatement mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
+                                    mofierlike.setString(1,blog_id);
+                            int affectedmodi = mofierlike.executeUpdate();
+                            session.setAttribute("blogliked",blog_id);
+                                   response.sendRedirect("modifier.jsp");
+                                }
+//                        response.sendRedirect("index.jsp");
                     } else {
                         out.print("Failed to update likes in blog table");
                     }
