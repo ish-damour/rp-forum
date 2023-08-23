@@ -19,7 +19,6 @@
                             <% 
                             String mail=(String)session.getAttribute("loggedemail"); 
                             String name=(String)session.getAttribute("loggedname"); 
-                            out.print(name);
                            %></div>
                         <div >
                             <a href=""><i class="fas fa-heart"></i> <!-- Solid heart icon -->

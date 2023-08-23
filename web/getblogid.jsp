@@ -1,14 +1,10 @@
-
-    
-    
+<%@include file="loginblocker.jsp" %>
 <%@ include file= "header.jsp" %>
 <%@ include file= "nav.jsp" %>
 
 <main class="container">
     <div class="row g-5 justify-content-center">
-        
-        
-    <%
+            <%
         // Retrieve the ID parameter from the URL
         String idParam = request.getParameter("id");
         
@@ -16,8 +12,6 @@
         int id = Integer.parseInt(idParam);
         session.setAttribute("idgetted",+id);
     %>
-        
-        
         <%  
         String nameCheck = (String) session.getAttribute("loggedname");
         if (nameCheck != null) {
@@ -25,7 +19,7 @@
         <div class="col-md-4">
             <div class="position-sticky" style="top: 8rem;">
                 <div class="p-1">
-                    <%@ include file= "NewPost.jsp" %>
+                    <%@ include file= "starterProfile.jsp" %>
                 </div>
             </div>
         </div>
@@ -39,17 +33,11 @@
                     </nav>
                 </div>
                 <div class="col-lg-12">
-                    <%@ include file="postsetted.jsp" %>
+                      <%@ include file="postsetted.jsp" %>
                 </div>
             </div>
         </div>
     </div>
 </main>
-
-    
-    
-    
-    
- 
-</body>
-</html>
+                <div hidden="">
+                    <%@ include file="footer.jsp" %></div>

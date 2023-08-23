@@ -1,26 +1,30 @@
 <%@ page import="java.io.*, java.sql.*" %>
 <%@ include file="connections.jsp" %>
 <div class="flex flex-column gap-4">
-<%
+    <%
         try{
 //            PreparedStatement psSelect = 
 //            conn.prepareStatement("SELECT * FROM blogs,users where users.user_id=blogs.user_id");
 //            ResultSet resultSet = psSelect.executeQuery();
-      int idi=(int)session.getAttribute("idgetted");
-
-         String query = "SELECT * FROM blogs,users where users.user_id=blogs.user_id and blogs.blog_id="+idi;
-        Statement statement = conn.createStatement();
-      ResultSet  resultSet = statement.executeQuery(query);
-
-        while (resultSet.next()) {
-            int imageId = resultSet.getInt("blog_id");
-            String imageName = resultSet.getString("image_name");
-            String imageDescription = resultSet.getString("image_data");
+            int idi=(int)session.getAttribute("idgetted");
+            int loggedid = (int) session.getAttribute("loggedid");
             
-//         if(resultSet.next()){
-         
-  
-//            while (resultSet.next()) {
+            String query = "SELECT blogs.*,users.* FROM blogs,users where users.user_id=blogs.user_id and blogs.blog_id="+idi;
+            String querycomment = "SELECT  * FROM comment,blogs,users where"
+                                    + " users.user_id=comment.commentedbyid "
+                                    + "and comment.blogid=blogs.blog_id "
+                                    + "and blogs.blog_id="+idi+""
+                                    + " order by comment.created_at desc";
+            Statement statement = conn.createStatement();
+            ResultSet  resultSet = statement.executeQuery(query);
+            if(resultSet.next()){
+            
+                int imageId = resultSet.getInt("blog_id");
+                String imageName = resultSet.getString("image_name");
+                String imageDescription = resultSet.getString("image_data");
+                String likehas = resultSet.getString("likeshas");
+                String commenthas=resultSet.getString("likeshas"); 
+             
                 String username = resultSet.getString("username");                
                 String created_at = resultSet.getString("created_at");
                 String title = resultSet.getString("title");
@@ -28,105 +32,146 @@
                 String content = resultSet.getString("content");
                 String truncatedText = fullText.substring(0, Math.min(fullText.length(), 50));
                 request.setAttribute("truncatedText", truncatedText);
-                request.setAttribute("fullText", fullText);
-//                int imageId = resultSet.getInt("blog_id");
-//            String imageName = resultSet.getString("image_name");
-
+                request.setAttribute("fullText", fullText); 
                 int followingid = resultSet.getInt("user_id");
-                
-%>
-    <div class="card mb-3">
-        <div class="card-header">
-          <div class=" d-flex gap-3">
-              <div>
-                  <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
-              </div>
-              <div class="flex-fill">
-                  <div class="flex flex-column">
-                      <div><%= username%></div> 
-                  </div>
-              </div>
-              <div>
-                  <small><%=created_at%> </small>
-              </div>
-          </div>
-        </div>
-        <div class="card-body"> 
-            <h3><%=title%></h3> 
+            %>
             
-            <p id="truncatedContent">
-                
-                <a href="#" onclick="expandText();" class="nav-link">
-                    
-                                <%
-                    if(fullText.length()>50){
-                        %>
-                        
-                       <%= fullText %> 
-                       
-                       <%
-                        }else{
-                        %>
-                        
-                       <%= fullText %> 
-                       
-                       <% 
-                           }
-                    %>  
-                 </a></p>
+            <div class="card mb-3">
+                <div class="card-header">
+                  <div class=" d-flex gap-3">
+                      <div>
+                          <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
+                      </div>
+                      <div class="flex-fill">
+                          <div class="flex flex-column">
+                              <div><%= username%></div> 
+                          </div>
+                      </div>
+                      <div>
+                          <small><%=created_at%> </small>
+                      </div>
+                  </div>
+                </div>
+                <div class="card-body"> 
+                    <h3><%=title%></h3> 
+                    <p><%= fullText %> </p>
+
+ <img src="getImage.jsp?id=<%= imageId %>" alt="<%= imageName %>" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">
+                </div>
+                    <form action="likelogic.jsp" method="post" class="class="card-footer"">
+                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden> 
+                    <div class=" d-flex gap-3">
+                <%
+             // Check if the user already liked the blog
+            PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM likes WHERE blog_id = ? AND likedby_id = ? and liked=?");
+            psSelectl.setInt(1, imageId);
+            psSelectl.setInt(2,loggedid);  
+            psSelectl.setInt(3,1);  
+            ResultSet  resultSetl = psSelectl.executeQuery();            
+                  
+            if(resultSetl.next()){
+                %>
+                  <div class="flex-fill">           
+                      <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
+                      <button class="btn btn-default" name="like"><strong><%=likehas%>
+                        <i class="fas fa-heart"></i>
+                        Liked</strong>
+                      </button>
+                  </div>                  
+                  <%  
+                      }else{
+                  %>
+                  <div class="flex-fill">            
+                      <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
+                      <button class="btn btn-default" name="like"><%=likehas%>
+                   <i class="far fa-heart"></i>
+                       Like</button>
+                  </div>                  
+                  <%    
+                      }
+                  %>
+                    <div class="flex-fill"> 
+                  <%    
+       PreparedStatement    psSelectcomment = conn.prepareStatement("SELECT count(blogid) as totalcomment FROM comment WHERE blogid =?");
+            psSelectcomment.setInt(1, idi);
+            ResultSet  resultSetlcomment= psSelectcomment.executeQuery();  
+if(resultSetlcomment.next()){
+String totalcomment=resultSetlcomment.getString("totalcomment");
+    %>
+                         
+                  <div class="flex-fill">
+                      <strong><%=totalcomment %> <i class="far fa-comment"></i>
+                      Comment
+                      </strong> </div>
+
+                     <%
+                         }
+                  %>
+                  
+   
+                        </div>
+                         <div class="flex-fill text-danger">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                          </svg> Delete
+                        </div>
+                         <div class="flex-fill">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
+                                <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+                              </svg>Save
+                        </div>
+                      
+                    </div> 
+                   </form>
            
-
-            <script>
-            function expandText() {
-                document.getElementById("truncatedContent").style.display = "none";
-                document.getElementById("expandedContent").style.display = "block";
-            }
-
-            function collapseText() {
-                document.getElementById("expandedContent").style.display = "none";
-                document.getElementById("truncatedContent").style.display = "block";
-            }
-            </script>
-            <img src="getImage.jsp?id=<%= imageId %>" alt="<%= imageName %>" class="mg img-rounded col-lg-12">
-
+                  
+           <!--comment--> 
+           <%
+                ResultSet  resultSetcomment = statement.executeQuery(querycomment);               
+                %>
+                <div class="row gap-3 p-4">
+                    <form action="commentlogic.jsp" method="post" class="d-flex">
+                        <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden> 
+                        <textarea class="form-control rounded-0" name="commenttext"></textarea>
+                        <button class="btn btn-primary rounded-0" type="submit" name="addcomment"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                    <hr class="m-1 p-2">
+                    Recent comments
+                   <% while(resultSetcomment.next()){
+                     String commentedby=resultSetcomment.getString("username");
+                      String contentcomm=resultSetcomment.getString("comment"); 
+                    String created_at_comment=resultSetcomment.getString("created_at"); 
+                   %>
+                     <div class="d-flex flex-column ">
+                         <div class="d-flex flex-row text-muted">
+                             <div class="flex-fill">
+                                 <small> <%= commentedby %></small>
+                             </div>
+                              <div class="">
+                                  <small> <%= created_at_comment %></small>
+                             </div> 
+                         </div> 
+                            <p style="overflow-wrap: break-word;">
+                        
+                            <%= contentcomm%> 
+                            </p>
+                        </div>
+                     <% }%>
+                </div> 
+               
+            <% 
+            
+        }else{
+            out.print("no results");
+        }
+        %>
          </div>
-          <div class="card-footer">
-              <div class=" d-flex gap-3"> 
-                  <div class="flex-fill">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
-                          <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>
-                        </svg> Like
-                  </div>
-                  <div class="flex-fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left" viewBox="0 0 16 16">
-                      <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                    </svg>  Comment
-                  </div>
-                   <div class="flex-fill text-danger">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                    </svg> Delete
-                  </div>
-                   <div class="flex-fill">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
-                          <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
-                        </svg>Save
-                  </div>
-              </div>
-            </div>
-      </div>          
-                
- <%
-                
-
-       }
-    
+         <%
         }catch(Exception e){ 
          out.print(e.getMessage());
         } 
-%>
-
+    %>
 </div>
 <%@ include file="footer.jsp" %>
