@@ -1,55 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Print Specified Division</title>
+    <style>
+        .printable {
+            display: block;
+            page-break-before: always;
+            page-break-after: always;
+        }
+    </style>
+    <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
 
-    
-    
-<%@ include file= "header.jsp" %>
-<%@ include file= "nav.jsp" %>
+            var printWindow = window.open('', '', 'width=800,height=800');
+            printWindow.document.open();
+            printWindow.document.write('<html><head><title>Print</title></head><body>' + printContents + '</body></html>');
+            printWindow.document.close();
 
-<main class="container">
-    <div class="row g-5 justify-content-center">
-        
-        
-    <%
-        // Retrieve the ID parameter from the URL
-        String idParam = request.getParameter("id");
-        
-        // Convert the parameter to an integer (you might need to handle exceptions)
-        int id = Integer.parseInt(idParam);
-        session.setAttribute("idgetted",+id);
-    %>
-        
-        
-        <%  
-        String nameCheck = (String) session.getAttribute("loggedname");
-        if (nameCheck != null) {
-        %>
-        <div class="col-md-4">
-            <div class="position-sticky" style="top: 8rem;">
-                <div class="p-1">
-                    <%@ include file= "NewPost.jsp" %>
-                </div>
-            </div>
-        </div>
-        <% } %>
-        <div class="col-md-8">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <nav class="blog-pagination" aria-label="Pagination">
-                        <a class="btn btn-sm btn-outline-secondary rounded-pill" href="#">Recent</a>
-                        <a class="btn btn-sm btn-outline-secondary rounded-pill" href="#">28-jan</a>
-                    </nav>
-                </div>
-                <div class="col-lg-12">
-                    <%@ include file="postsetted.jsp" %>
-                </div>
-            </div>
-        </div>
+            printWindow.print();
+            printWindow.close();
+
+            // Restore the original content
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+</head>
+<body>
+    <div>llllllllllllllll</div>
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+    <div id="printable">
+        <!-- Your content to be printed goes here -->
+        <h1>Printable Content</h1>
+        <p>This is the content you want to print.</p>
     </div>
-</main>
 
-    
-    
-    
-    
- 
+    <button onclick="printDiv('printable')">Print</button>
 </body>
 </html>

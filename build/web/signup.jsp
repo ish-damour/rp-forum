@@ -5,17 +5,19 @@
         <div class="card login-form">      
   <%@ include file="connections.jsp" %>
     <%
+
  
         if ("POST".equals(request.getMethod())) {
             try{ 
             
-                String email = request.getParameter("email");
+                String username = request.getParameter("username");  
+                String email =request.getParameter("email");
                 String Password = request.getParameter("password");
                 String C_Password = request.getParameter("cpassword");
                 String fname = request.getParameter("fname");       
                 String lname = request.getParameter("lname");
                 String college = request.getParameter("college");
-                String username = request.getParameter("username");   
+ 
             if(email != null && Password != null && fname != null && lname!=null && college != null && username!=null){
             
         
@@ -98,11 +100,13 @@
                   </div>
                   <div class="mb-3">
                     <label for="location" class="form-label">Email</label>
-                    <input type="Email" class="form-control" name="email" id="Email" placeholder="Your Email..">
+                    <input type="Email" value="<%=session.getAttribute("maile")%>" class="form-control" hidden="" name="email" id="Email" placeholder="Your Email..">
+                    <input type="Email" value="<%=session.getAttribute("maile")%>" class="form-control" disabled id="Email" placeholder="Your Email..">
                   </div>
                                 <div class="mb-3">
                     <label for="location" class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter Your @username..">
+                    <input type="text" class="form-control" value="<%=session.getAttribute("namemail")%>"id="username" placeholder="Enter Your @username.." disabled="">
+                    <input type="text" class="form-control" value="<%=session.getAttribute("namemail")%>" name="username" hidden id="username" placeholder="Enter Your @username..">
                   </div>
                         <div class="mb-3">
                     <label for="college" class="form-label">College</label>

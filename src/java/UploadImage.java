@@ -42,7 +42,7 @@ public class UploadImage extends HttpServlet {
             psInsert.setInt(6,0 );
 
             psInsert.executeUpdate();
-            response.sendRedirect("createNewPost.jsp");
+            response.sendRedirect("index.jsp");
 
             conn.close();
         } catch (Exception e) {

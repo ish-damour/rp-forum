@@ -142,11 +142,11 @@
             <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="40px" height="40px">
         </div>
 
-        <div class="mr-3">
+        <a href="profile.jsp?id=<%= followeduser %> class="mr-3">
             <!-- Username -->
             
                 <%= usernam %>                <%= followeduser %>
-        </div>
+        </a>
     </div>
     <!-- Right side: Follow/Unfollow button -->
     <form method="post" action="followlogic.jsp">

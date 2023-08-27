@@ -70,7 +70,7 @@
 
           </div>
         <div class="col-lg-12 mt-3 containered rounded shadow-sm text-center p-3 text-muted">
-        Don't you have in RP-forum? <a href="signup.jsp" class="mr-1">Create an account </a>.
+        Don't you have in RP-forum? <a href="verify.jsp" class="mr-1">Create an account </a>.
         </div>
         </div>
       </div>

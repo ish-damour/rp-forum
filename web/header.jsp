@@ -99,6 +99,17 @@
       .bd-mode-toggle {
         z-index: 1500;
       }
+      
+    .dropdown-menu{
+            height: 100vh;
+            position: fixed;
+            inset: 0px 0px auto auto;
+            margin: 0px;
+            transform: translate(0px, 33px);
+            min-width: 374px;
+            top: 0;
+            right: 10px;
+    }
     </style>
 
     
@@ -107,6 +118,29 @@
     <!-- Custom styles for this template -->
     <link href="blog.css" rel="stylesheet">
      <link rel="stylesheet" type="text/css" href="fontawesome-free-5.15.4-web/css/all.min.css">
+    
+         <script>
+        function confirmDelete() {
+            // Show the Bootstrap modal
+            $('#deleteModal').modal('show');
+        }
+
+        function deleteItem() {
+            // Close the modal
+            $('#deleteModal').modal('hide');
+
+            // Assuming you have a URL or a form to submit for item deletion
+            // You can use AJAX or standard form submission here
+            // Example using AJAX:
+            // $.post("deleteItem.jsp", {itemId: ""}, function(data) {
+            //     alert("Item deleted successfully!");
+            // });
+
+            // For this example, we'll just show an alert message
+            alert("Item deleted successfully!");
+        }
+    </script>
+     
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">

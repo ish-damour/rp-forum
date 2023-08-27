@@ -38,7 +38,7 @@
             
             <div class="card mb-3">
                 <div class="card-header">
-                  <div class=" d-flex gap-3">
+                    <a href="profile.jsp?id=<%= followingid %>" class=" d-flex gap-3">
                       <div>
                           <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
                       </div>
@@ -50,7 +50,7 @@
                       <div>
                           <small><%=created_at%> </small>
                       </div>
-                  </div>
+                  </a>
                 </div>
                 <div class="card-body"> 
                     <h3><%=title%></h3> 
