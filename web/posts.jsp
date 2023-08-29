@@ -35,21 +35,24 @@
                 
 %>
     <div class="card mb-3">
-        <div class="card-header">
-          <div class=" d-flex gap-3">
-              <div>
-                  <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
-              </div>
-              <div class="flex-fill">
-                  <div class="flex flex-column">
-                      <div><%= username%></div> 
-                  </div>
-              </div>
-              <div>
-                  <small><%=created_at%> </small>
-              </div>
-          </div>
+<div class="card-header">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
         </div>
+        <div class="col">
+            <div class="flex flex-column">
+                <div><%= username %></div>
+            </div>
+        </div>
+        <div class="col">
+            <div><small><%@include file="foll.jsp" %></small></div>
+        </div>
+        <div class="col">
+            <div><small><%= created_at %></small></div>
+        </div>
+    </div>
+</div>
                   <%
         String url = "getblogid.jsp?id=" + imageId;
     %>

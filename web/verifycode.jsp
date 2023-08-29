@@ -12,7 +12,7 @@
   session.setAttribute("maile",mai);
  response.sendRedirect("signup.jsp");
     }else{
- out.print("byanze wishe code "+code);    
+ out.print("Invalid verification code please provide right verified code that sent to your email ");    
     }
     }catch(Exception e){
     out.print(e);

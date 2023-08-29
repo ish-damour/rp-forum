@@ -58,9 +58,9 @@
 
  <img src="getImage.jsp?id=<%= imageId %>" alt="<%= imageName %>" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">
                 </div>
-                    <form action="likelogic.jsp" method="post" class="card-footer"">
+                <div class="card-footer">
+                    <div class="d-flex gap-3"> 
                     <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden> 
-                    <div class=" d-flex gap-3">
                 <%
              // Check if the user already liked the blog
             PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM likes WHERE blog_id = ? AND likedby_id = ? and liked=?");
@@ -71,26 +71,32 @@
                   
             if(resultSetl.next()){
                 %>
-                  <div class="flex-fill">           
-                      <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
+                  <div class="flex-fill">
+                      <form action="likelogic.jsp" method="post" ">           
+                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
+            <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
                       <button class="btn btn-default" name="like"><strong><%=likehas%>
                         <i class="fas fa-heart"></i>
                         Liked</strong>
-                      </button>
-                  </div>                  
+            </button></form>
+        </div>                  
                   <%  
                       }else{
                   %>
-                  <div class="flex-fill">            
-                      <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
+        <div class="flex-fill">
+                    <form method="post" action="likelogic.jsp" >       
+                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
+            <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
                       <button class="btn btn-default" name="like"><%=likehas%>
                    <i class="far fa-heart"></i>
-                       Like</button>
-                  </div>                  
+                       Like           
+                      </button>
+                    </form>
+                     </div>               
                   <%    
                       }
                   %>
-                    <div class="flex-fill"> 
+                    <div> 
                   <%    
        PreparedStatement    psSelectcomment = conn.prepareStatement("SELECT count(blogid) as totalcomment FROM comment WHERE blogid =?");
             psSelectcomment.setInt(1, idi);
@@ -103,28 +109,53 @@ String totalcomment=resultSetlcomment.getString("totalcomment");
                       <strong><%=totalcomment %> <i class="far fa-comment"></i>
                       Comment
                       </strong> </div>
+ </div>
+        <%
+        }
 
-                     <%
-                         }
-                  %>
-                  
-   
-                        </div>
-                         <div class="flex-fill text-danger">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                          </svg> Delete
-                        </div>
-                         <div class="flex-fill">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>
-                                <path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
-                              </svg>Save
-                        </div>
+        // Check if the user already saved the blog
+        PreparedStatement psSelects = conn.prepareStatement("SELECT * FROM saved WHERE blogid = ? AND savedby = ? and saved=?");
+        psSelects.setInt(1, imageId);
+        psSelects.setInt(2, loggedid);
+        psSelects.setInt(3, 1);
+        ResultSet resultSetsavedbtn = psSelects.executeQuery();
+        
+        if (resultSetsavedbtn.next()) {
+        String blogsave=resultSetsavedbtn.getString("blogid");
+        %>
+        
+        <div class="flex-fill">
+            <form method="post" action="savelogic.jsp">
+            <input type="hidden" name="previousPage" value="<%=imageId %>"">
+            <input type="hidden" name="hiddenblogid" value="<%=imageId %>"">
+            <button class="btn btn-default" name="unsave" type="submit"><strong>
+                    <i class="fas fa-star-half-alt"></i>
+                    Saved
+                </strong>
+            </button>      
+        </div>
+        <%
+        } else {
+        %>
+        <div class="flex-fill">
+             <form method="post" action="savelogic.jsp">
+            <input type="hidden" name="previousPage" value="<%=imageId %>">
+            <input type="hidden" name="hiddenblogid" value="<%=imageId %>"">
+            <button class="btn btn-default" name="saving" type="submit">
+                <i class="fas fa-download"></i>
+                Save
+            </button></form>
+            
+        </div>
+  
+        <%
+        } 
+        %>
+
                       
-                    </div> 
-                   </form>
+                    </div>
+                </div>
+                   <!--</form>-->
            
                   
            <!--comment--> 

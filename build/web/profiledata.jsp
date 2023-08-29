@@ -10,6 +10,7 @@
 //            conn.prepareStatement("SELECT * FROM blogs,users where users.user_id=blogs.user_id");
 //            ResultSet resultSet = psSelect.executeQuery();
           int loggedid = (int) session.getAttribute("loggedid");
+          String gid=request.getParameter("id");
 //         String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at,blogs.image_name,blogs.image_data,blogs.likeshas,blogs.user_id,users.username,latest_modifiers.last_modified FROM blogs JOIN users ON blogs.user_id = users.user_id LEFT JOIN (SELECT blogid, MAX(last_modified)"
 //         + " AS last_modified FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id  = latest_modifiers.blogid ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
        
@@ -28,9 +29,10 @@ String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_
     + "JOIN users ON blogs.user_id = users.user_id "
     + "LEFT JOIN (SELECT blogid, MAX(last_modified) AS last_modified "
     + "FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id = latest_modifiers.blogid "
-    + "WHERE users.user_id = '" + loggedid + "' "
-    + "OR users.user_id IN (SELECT followers.following_id FROM followers WHERE followed = 1 and followedby_id='"+loggedid+"') "
+    + "WHERE users.user_id = '" + gid + "' "
     + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+
+
 
 
 
@@ -105,13 +107,14 @@ String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_
             </div>
         </div>
         <div class="col">
-            <div><small><%@include file="follo.jsp" %></small></div>
+            <div><small><%@include file="foll.jsp" %></small></div>
         </div>
         <div class="col">
             <div><small><%= created_at %></small></div>
         </div>
     </div>
 </div>
+
                   <%
         String url = "getblogid.jsp?id=" + imageId;
     %>

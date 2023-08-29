@@ -13,14 +13,56 @@
 //         String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at,blogs.image_name,blogs.image_data,blogs.likeshas,blogs.user_id,users.username,latest_modifiers.last_modified FROM blogs JOIN users ON blogs.user_id = users.user_id LEFT JOIN (SELECT blogid, MAX(last_modified)"
 //         + " AS last_modified FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id  = latest_modifiers.blogid ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
        
+//String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
+//    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
+//    + "latest_modifiers.last_modified FROM blogs "
+//    + "JOIN users ON blogs.user_id = users.user_id "
+//    + "LEFT JOIN (SELECT blogid, MAX(last_modified) AS last_modified "
+//    + "FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id = latest_modifiers.blogid "
+//    + "WHERE users.user_id IN (SELECT followers.following_id FROM followers WHERE followed != 0 and followedby_id='"+loggedid+"') "
+//    + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+
 String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
     + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
     + "latest_modifiers.last_modified FROM blogs "
     + "JOIN users ON blogs.user_id = users.user_id "
     + "LEFT JOIN (SELECT blogid, MAX(last_modified) AS last_modified "
     + "FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id = latest_modifiers.blogid "
-    + "WHERE users.user_id IN (SELECT following_id FROM followers WHERE followed = 1 and followedby_id='"+loggedid+"') "
+    + "WHERE users.user_id = '" + loggedid + "' "
+    + "OR users.user_id IN (SELECT followers.following_id FROM followers WHERE followed = 1 and followedby_id='"+loggedid+"') "
     + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+
+
+
+
+
+//String query = "WITH LatestModifiers AS ("
+//    + "SELECT blogid, MAX(last_modified) AS last_modified "
+//    + "FROM modifier GROUP BY blogid"
+//    + ")"
+//    + "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
+//    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
+//    + "lm.last_modified "
+//    + "FROM blogs "
+//    + "JOIN users ON blogs.user_id = users.user_id "
+//    + "LEFT JOIN LatestModifiers AS lm ON blogs.blog_id = lm.blogid "
+//    + "WHERE users.user_id IN (SELECT followedby_id FROM followers WHERE followed = 1) "
+//    + "UNION ALL " // Combine with blogs posted by user_id = 1
+//    + "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
+//    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
+//    + "lm2.last_modified "
+//    + "FROM blogs "
+//    + "JOIN users ON blogs.user_id = users.user_id "
+//    + "LEFT JOIN LatestModifiers AS lm2 ON blogs.blog_id = lm2.blogid "
+//    + "WHERE users.user_id = 1 " // Select blogs posted by user_id = 1
+//    + "UNION ALL " // Combine with blogs posted by other users (optional)
+//    + "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
+//    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
+//    + "lm3.last_modified "
+//    + "FROM blogs "
+//    + "JOIN users ON blogs.user_id = users.user_id "
+//    + "LEFT JOIN LatestModifiers AS lm3 ON blogs.blog_id = lm3.blogid "
+//    + "WHERE users.user_id != 1 ";
 
 
 
@@ -52,21 +94,24 @@ String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_
                 
 %>
     <div class="card mb-3">
-        <div class="card-header">
-            <a href="profile.jsp?id=<%= followingid %>" class=" d-flex gap-3">
-              <div>
-                  <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
-              </div>
-              <div class="flex-fill">
-                  <div class="flex flex-column">
-                      <div><%= username%></div> 
-                  </div>
-              </div>
-              <div>
-                  <small><%=created_at%> </small>
-              </div>
-          </a>
+<div class="card-header">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
         </div>
+        <div class="col">
+            <div class="flex flex-column">
+                <div><%= username %></div>
+            </div>
+        </div>
+        <div class="col">
+            <div><small><%@include file="follo.jsp" %></small></div>
+        </div>
+        <div class="col">
+            <div><small><%= created_at %></small></div>
+        </div>
+    </div>
+</div>
                   <%
         String url = "getblogid.jsp?id=" + imageId;
     %>
@@ -210,6 +255,12 @@ String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_
                 
 
        }
+if(resultSet.next()){
+
+}else{
+ String ge = "<p class='alert alert-secondary text-center'><strong>Continue by Following your intrested in expole and post your blogs to enjoy!!</strong></p>";
+out.print(ge);
+}
     
         }catch(Exception e){ 
          out.print(e.getMessage());
@@ -217,4 +268,4 @@ String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_
 %>
 
 </div>
-<%@ include file="footer.jsp" %>
+<div hidden=""><%@ include file="footer.jsp" %></div>
