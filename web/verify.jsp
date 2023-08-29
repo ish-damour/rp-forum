@@ -34,7 +34,7 @@
                 else{
                 session.setAttribute("username", username);
                 session.setAttribute("email", email);
-
+                session.setAttribute("confirmmail", "confirmmail");
                         request.getRequestDispatcher("Confirmemail").forward(request, response);
                      }
         }else{
@@ -65,7 +65,7 @@
                     <input type="text" class="form-control" name="userename" id="userename" placeholder="Enter Your @username..">
                   </div>
                 <div class="mb-3">
-                    <button type="submit" class="w-100 btn btn-block btn-secondary">Confirm</button>
+                    <button type="submit" class="w-100 btn btn-block btn-secondary" name="confirmmail">Confirm</button>
                 </div>
             </form>
           </div>

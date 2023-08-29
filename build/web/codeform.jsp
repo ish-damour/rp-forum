@@ -14,9 +14,11 @@
             <h2 class="text-center mb-4">Enter Confirm code You received</h2>
             <form class="row gap-3" action="verifycode.jsp" method="post"> 
                 <%= message %>
-          <input type="text" class="form-control" name="emailgot" value="<%=imel%>" id="Email" >
-                <input type="text" class="form-control" name="namegot" value="<%=inam%>" id="Email" >
-                    <input type="text" class="form-control" name="codegot" value="<%=icodes%>" id="Email" >
+                <input type="text" class="form-control"  value="<%=imel%>" id="Email"  disabled="">
+                <input type="text" class="form-control"  value="<%=inam%>" id="Email" disabled>
+          <input type="text" class="form-control" name="emailgot"  value="<%=imel%>" id="Email" hidden>
+          <input type="text" class="form-control" name="namegot" value="<%=inam%>" id="Email" hidden >
+                <input type="text" class="form-control" name="codegot" value="<%=icodes%>" id="Email" hidden >
                                 <div class="mb-3">
                     <label for="location" class="form-label">Codes</label>
                     <input type="text" class="form-control" name="authcode" id="username" placeholder="Enter Confirmation code">

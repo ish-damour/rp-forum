@@ -20,10 +20,8 @@
                             String mail=(String)session.getAttribute("loggedemail"); 
                             String name=(String)session.getAttribute("loggedname"); 
                            %></div>
-                        <div >
-                            <a href=""><i class="fas fa-heart"></i> <!-- Solid heart icon -->
-
-                            </a>
+                        <div class="btn">
+                            <%=name %><i class="fas fa-heart"></i> <!-- Solid heart icon -->
                         </div>
                     </div>
                 </div>
@@ -142,10 +140,10 @@
             <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="40px" height="40px">
         </div>
 
-        <a href="profile.jsp?id=<%= followeduser %> class="mr-3">
+        <a href="profile.jsp?id=<%= followeduser %>" class="mr-3 link btn">
             <!-- Username -->
             
-                <%= usernam %>                <%= followeduser %>
+                <%= usernam %>      
         </a>
     </div>
     <!-- Right side: Follow/Unfollow button -->

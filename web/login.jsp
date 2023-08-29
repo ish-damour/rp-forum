@@ -16,7 +16,7 @@
 						<div class="col-lg-12 mt-4">
 							<div class="d-flex flex-row">
 							<label class="flex-grow-1">Password</label>
-							<a href="forgot.php" class="text-danger">Forgot password ?</a>
+							<a href="forget.jsp" class="text-danger">Forgot password ?</a>
 						</div> 
 						<input type="Password" id="password" name="password" placeholder="Enter Password" class="form-control <?php echo $style ?>">
 					</div>

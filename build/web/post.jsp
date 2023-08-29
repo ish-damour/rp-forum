@@ -10,8 +10,21 @@
 //            conn.prepareStatement("SELECT * FROM blogs,users where users.user_id=blogs.user_id");
 //            ResultSet resultSet = psSelect.executeQuery();
           int loggedid = (int) session.getAttribute("loggedid");
-         String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at,blogs.image_name,blogs.image_data,blogs.likeshas,blogs.user_id,users.username,latest_modifiers.last_modified FROM blogs JOIN users ON blogs.user_id = users.user_id LEFT JOIN (SELECT blogid, MAX(last_modified)"
-         + " AS last_modified FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id  = latest_modifiers.blogid ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+//         String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at,blogs.image_name,blogs.image_data,blogs.likeshas,blogs.user_id,users.username,latest_modifiers.last_modified FROM blogs JOIN users ON blogs.user_id = users.user_id LEFT JOIN (SELECT blogid, MAX(last_modified)"
+//         + " AS last_modified FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id  = latest_modifiers.blogid ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+       
+String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
+    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
+    + "latest_modifiers.last_modified FROM blogs "
+    + "JOIN users ON blogs.user_id = users.user_id "
+    + "LEFT JOIN (SELECT blogid, MAX(last_modified) AS last_modified "
+    + "FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id = latest_modifiers.blogid "
+    + "WHERE users.user_id IN (SELECT following_id FROM followers WHERE followed = 1 and followedby_id='"+loggedid+"') "
+    + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+
+
+
+
         Statement statement = conn.createStatement();
       ResultSet  resultSet = statement.executeQuery(query);
         
@@ -82,9 +95,11 @@
 
         </a> </div>
 <!--            <form action="likelogic.jsp" method="post">-->
-                <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
+        
+               
 <div class="card-footer">
-    <div class="d-flex gap-3">
+    <div class="d-flex gap-3"> 
+        <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
         <%
         // Check if the user already liked the blog
         PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM likes WHERE blog_id = ? AND likedby_id = ? and liked=?");
@@ -95,22 +110,27 @@
 
         if (resultSetl.next()) {
         %>
-        <div class="flex-fill">
+
+            <div class="flex-fill">
+                <form method="post" action="likelogic.jsp" >
+                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
             <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
             <button class="btn btn-default" name="like"><strong><%= resultlike %>
                 <i class="fas fa-heart"></i>
                 Liked</strong>
-            </button>
+            </button></form>
         </div>
         <%
         } else {
         %>
         <div class="flex-fill">
+                    <form method="post" action="likelogic.jsp" >
+                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
             <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
             <button class="btn btn-default" name="like"><%= resultlike %>
                 <i class="far fa-heart"></i>
                 Like
-            </button>
+            </button></form>
         </div>
         <%
         }
@@ -158,10 +178,10 @@
             <input type="hidden" name="previousPage" value="<%=imageId %>"">
             <input type="hidden" name="hiddenblogid" value="<%=imageId %>"">
             <button class="btn btn-default" name="unsave" type="submit"><strong>
-                    <i class="fas fa-download"></i>
+                    <i class="fas fa-star-half-alt"></i>
                     Saved
                 </strong>
-            </button>      </form>
+            </button>      
         </div>
         <%
         } else {
@@ -171,7 +191,7 @@
             <input type="hidden" name="previousPage" value="<%=imageId %>">
             <input type="hidden" name="hiddenblogid" value="<%=imageId %>"">
             <button class="btn btn-default" name="saving" type="submit">
-                <i class="fas fa-arrow-down"></i>
+                <i class="fas fa-download"></i>
                 Save
             </button></form>
             

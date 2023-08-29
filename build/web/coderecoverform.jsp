@@ -11,26 +11,24 @@
             String icodes=(String)session.getAttribute("codes");
             String inam=(String)session.getAttribute("username");
             %><%=imes%> <%=imel%></span>
-            <h2 class="text-center mb-4">Enter Confirm code You received</h2>
-            <form class="row gap-3" action="verifycode.jsp" method="post"> 
+            <h2 class="text-center mb-4">Enter Recover code You received</h2>
+            <form class="row gap-3" action="verifyrecoverycode.jsp" method="post"> 
                 <%= message %>
-                <input type="text" class="form-control"  value="<%=imel%>" id="Email"  disabled="">
-                <input type="text" class="form-control"  value="<%=inam%>" id="Email" disabled>
-          <input type="text" class="form-control" name="emailgot"  value="<%=imel%>" id="Email" hidden>
-          <input type="text" class="form-control" name="namegot" value="<%=inam%>" id="Email" hidden >
-                <input type="text" class="form-control" name="codegot" value="<%=icodes%>" id="Email" hidden >
+                <input type="text" class="form-control"  value="<%=imel%>" id="Email" disabled="" >
+                <input type="text" class="form-control"  value="<%=inam%>" id="Email" disabled="" >               
+                
+                <input type="text" class="form-control" name="emailgot" value="<%=imel%>" id="Email" hidden >
+                <input type="text" class="form-control" name="namegot" value="<%=inam%>" id="Email" hidden >
+                    <input type="text" class="form-control" name="codegot" value="<%=icodes%>" id="Email" hidden>
                                 <div class="mb-3">
                     <label for="location" class="form-label">Codes</label>
                     <input type="text" class="form-control" name="authcode" id="username" placeholder="Enter Confirmation code">
                   </div>
                 <div class="mb-3">
-                    <button type="submit" class="w-100 btn btn-block btn-secondary">Confirm</button>
+                    <button type="submit" class="w-100 btn btn-block btn-secondary">Recovery</button>
                 </div>
             </form>
           </div>
-        <div class="col-lg-12 mt-3 containered rounded shadow-sm text-center p-3 text-muted">
-        Already have an account in RP-forum? <a href="login.jsp" class="mr-1">Sign in </a>.
-        </div>
         </div>
       </div>
     </div>

@@ -10,17 +10,17 @@
 //            conn.prepareStatement("SELECT * FROM blogs,users where users.user_id=blogs.user_id");
 //            ResultSet resultSet = psSelect.executeQuery();
           int loggedid = (int) session.getAttribute("loggedid");
-//         String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at,blogs.image_name,blogs.image_data,blogs.likeshas,blogs.user_id,users.username,latest_modifiers.last_modified FROM blogs JOIN users ON blogs.user_id = users.user_id LEFT JOIN (SELECT blogid, MAX(last_modified)"
-//         + " AS last_modified FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id  = latest_modifiers.blogid ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+         String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at,blogs.image_name,blogs.image_data,blogs.likeshas,blogs.user_id,users.username,latest_modifiers.last_modified FROM blogs JOIN users ON blogs.user_id = users.user_id LEFT JOIN (SELECT blogid, MAX(last_modified)"
+         + " AS last_modified FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id  = latest_modifiers.blogid ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
        
-String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
-    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
-    + "latest_modifiers.last_modified FROM blogs "
-    + "JOIN users ON blogs.user_id = users.user_id "
-    + "LEFT JOIN (SELECT blogid, MAX(last_modified) AS last_modified "
-    + "FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id = latest_modifiers.blogid "
-    + "WHERE users.user_id IN (SELECT following_id FROM followers WHERE followed = 1 and followedby_id='"+loggedid+"') "
-    + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
+//String query = "SELECT blogs.blog_id, blogs.title, blogs.content, blogs.created_at, "
+//    + "blogs.image_name, blogs.image_data, blogs.likeshas, blogs.user_id, users.username, "
+//    + "latest_modifiers.last_modified FROM blogs "
+//    + "JOIN users ON blogs.user_id = users.user_id "
+//    + "LEFT JOIN (SELECT blogid, MAX(last_modified) AS last_modified "
+//    + "FROM modifier GROUP BY blogid) AS latest_modifiers ON blogs.blog_id = latest_modifiers.blogid "
+//    + "WHERE users.user_id IN (SELECT following_id FROM followers WHERE followed = 1 and followedby_id='"+loggedid+"') "
+//    + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
 
 
 

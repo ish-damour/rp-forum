@@ -58,7 +58,7 @@
 
  <img src="getImage.jsp?id=<%= imageId %>" alt="<%= imageName %>" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">
                 </div>
-                    <form action="likelogic.jsp" method="post" class="class="card-footer"">
+                    <form action="likelogic.jsp" method="post" class="card-footer"">
                     <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden> 
                     <div class=" d-flex gap-3">
                 <%

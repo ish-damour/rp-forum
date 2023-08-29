@@ -42,6 +42,9 @@ public class Confirmemail extends HttpServlet {
             
             
                 try {
+                  if(session.getAttribute("confirmmail")!=null){
+                      
+                      
                     String codes= getRandom();
                     String useremail=request.getParameter("useremail");
                     String userename=request.getParameter("userename");
@@ -51,7 +54,27 @@ public class Confirmemail extends HttpServlet {
                         session.setAttribute("email", useremail);
                         session.setAttribute("codes",codes);
                         session.setAttribute("username",userename);
-                        response.sendRedirect("codeform.jsp");
+                        response.sendRedirect("codeform.jsp");                      
+                      
+session.removeValue("confirmmail");
+                  }else if(session.getAttribute("forgetpass")!=null){
+                      
+
+                     String codes= getRandom();
+                    String useremail=request.getParameter("useremail");
+                    String userenam=(String)session.getAttribute("usernam");
+
+                        sendRecoverPassword(useremail, userenam, "RP-FORUM Security Team", "Password Recover", codes, "+250781006107");
+                        session.setAttribute("result", "OTP sent Successful on your email: ");
+                        session.setAttribute("email", useremail);
+                        session.setAttribute("codes",codes);
+                        session.setAttribute("username",userenam);
+                        response.sendRedirect("coderecoverform.jsp");                       
+session.removeValue("confirmmail");
+session.removeValue("userenam");
+                }    
+                    
+
 
                 }catch (EmailException ex) {
                     ex.printStackTrace();
@@ -96,4 +119,30 @@ String messageText = "Dear " + tenant_fname + ", "
         email.addTo(tenant_email);
         email.send();
     }
+    
+   
+     private void sendRecoverPassword(String tenant_email, String tenant_fname, String owner_names, String decision, String city, String mobile) throws EmailException {
+        // Send email using JavaMail API and Apache Commons Email library
+        Email email = new SimpleEmail();
+        email.setHostName("smtp.gmail.com");
+        email.setSmtpPort(465);
+
+        email.setAuthenticator(new DefaultAuthenticator("ishimue250@gmail.com", "zcgujabitaxsxnjx"));
+
+        email.setSSLOnConnect(true);
+        email.setStartTLSEnabled(true);
+        email.setFrom("ishimue250@gmail.com");
+        email.setSubject("RP-FORUM Password Recovering  ");
+
+String messageText = "Dear " + tenant_fname + ", "
+                + "Enter this OTP Code to recover "
+        + "Your Password on RP FORUM"
+        + " platform Your Recovery code is: "
+        + "" + city + 
+        "  Copy and paste to continue."
+          + "RP_FORUM 2023\n";
+        email.setMsg(messageText);
+        email.addTo(tenant_email);
+        email.send();
+    }   
 }
