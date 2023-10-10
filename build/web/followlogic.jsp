@@ -45,7 +45,14 @@ try{
                             int rowaffect = paddlike.executeUpdate();
                             
                             if (rowaffect > 0) {
-                                response.sendRedirect("UsersList.jsp");
+            PreparedStatement notifyme = conn.prepareStatement("INSERT INTO notify (owner_id, reacter_id, action,seen) VALUES (?,?, ?, ?)");
+            notifyme.setString(1, followed_id);
+            notifyme.setInt(2, likedby_id);
+            notifyme.setString(3,"following");
+            notifyme.setInt(4, 0);
+            int rowAffected = notifyme.executeUpdate();                            
+                            
+//                                response.sendRedirect("UsersList.jsp");
                             } else {
                                 out.print("Error while updating follows in the blogs table");
                             }
@@ -76,6 +83,15 @@ try{
                             int rowaffect = paddlike.executeUpdate();
                             
                             if (rowaffect > 0) {
+            PreparedStatement notifyme = conn.prepareStatement("INSERT INTO notify (owner_id, reacter_id, action,seen) VALUES (?,?, ?, ?)");
+            notifyme.setString(1, followed_id);
+            notifyme.setInt(2, likedby_id);
+            notifyme.setString(3,"unfollowed");
+            notifyme.setInt(4, 0);
+            int rowAffected = notifyme.executeUpdate();                            
+                                                        
+                            
+                            
                                 response.sendRedirect("UsersList.jsp");
                             } else {
                                 out.print("Error while updating likes in the blogs table");
@@ -111,6 +127,15 @@ try{
                     int rowsAffected = psUpdateLikes.executeUpdate();
 
                     if (rowsAffected > 0) {
+           
+             PreparedStatement notifyme = conn.prepareStatement("INSERT INTO notify (owner_id, reacter_id, action,seen) VALUES (?,?, ?, ?)");
+            notifyme.setString(1, followed_id);
+            notifyme.setInt(2, likedby_id);
+            notifyme.setString(3,"following");
+            notifyme.setInt(4, 0);
+            notifyme.executeUpdate();                            
+                                               
+                    
                      response.sendRedirect("UsersList.jsp");
                     } else {
                         out.print("Failed to update likes in blog table");

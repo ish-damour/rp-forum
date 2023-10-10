@@ -25,7 +25,7 @@
                     </nav>
                 </div>
                 <div class="col-lg-12">
-                    <%@ include file="post.jsp" %>
+                    <%@ include file="notify.jsp" %>
                 </div>
             </div>
         </div>

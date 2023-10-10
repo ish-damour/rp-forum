@@ -59,7 +59,7 @@
             <div>
                 <!-- Unfollow button -->
                 <input type="hidden" value="<%= followed_id %>" name="followingidi">
-                <button class="btn btn-sm btn-secondary" type="submit" name="unfollow">Unfollow</button>
+                <button class="btn btn-sm btn-secondary " type="submit" name="unfollow">following</button>
             </div>
         <%
             } else {
@@ -67,7 +67,7 @@
             <div>
                 <!-- Follow button -->
                 <input type="hidden" value="<%=followeduser%>" name="followingidi">
-                <button class="btn btn-sm btn-secondary" type="submit" name="follow">Follow</button>
+                <button class="btn btn-sm btn-secondary " type="submit" name="follow">Follow</button>
             </div>
         <%
             }

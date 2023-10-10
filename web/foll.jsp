@@ -36,6 +36,7 @@
             <div>
                 <!-- Unfollow button -->
                 <input type="hidden" value="<%= followed_id %>" name="followingidi">
+                <input type="hidden" name="prev" value="">
                 <button class="btn btn-sm btn-default text-center" type="submit" name="unfollow">Unfollow</button>
             </div>
         <%

@@ -1,41 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Print Specified Division</title>
-    <style>
-        .printable {
-            display: block;
-            page-break-before: always;
-            page-break-after: always;
+
+<%@ page import="java.sql.*" %>
+<%@ include file="connections.jsp" %>   
+<%
+   Statement    statemen = conn.createStatement();
+ %> 
+  <%
+        ResultSet rsi = statemen.executeQuery("SELECT * FROM posts");
+        while (rsi.next()) {
+            int idll = rsi.getInt("id");
+            String titlej = rsi.getString("title");
+            int likesj = rsi.getInt("likes");
+    %>
+            <div>
+                <h2><%= titlej %></h2>
+                <button onclick="likePost(<%= idll %>)">Like</button>
+                <span id="likes_<%= idll %>"><%= likesj %></span> Likes
+            </div>
+    <%
         }
-    </style>
+        rsi.close();
+    %>
     <script>
-        function printDiv(divName) {
-            var printContents = document.getElementById(divName).innerHTML;
-            var originalContents = document.body.innerHTML;
-
-            var printWindow = window.open('', '', 'width=800,height=800');
-            printWindow.document.open();
-            printWindow.document.write('<html><head><title>Print</title></head><body>' + printContents + '</body></html>');
-            printWindow.document.close();
-
-            printWindow.print();
-            printWindow.close();
-
-            // Restore the original content
-            document.body.innerHTML = originalContents;
+        function likePost(postId) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var newLikeCount = xhr.responseText;
+                    document.getElementById("likes_" + postId).innerHTML = newLikeCount;
+                }
+            };
+            xhr.open("POST", "like_handler.jsp", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send("postId=" + postId);
         }
-    </script>
-</head>
-<body>
-    <div>llllllllllllllll</div>
-    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
-    <div id="printable">
-        <!-- Your content to be printed goes here -->
-        <h1>Printable Content</h1>
-        <p>This is the content you want to print.</p>
-    </div>
-
-    <button onclick="printDiv('printable')">Print</button>
-</body>
-</html>
+    </script>   
+    

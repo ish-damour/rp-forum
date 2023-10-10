@@ -110,27 +110,32 @@
 
         if (resultSetl.next()) {
         %>
-
-            <div class="flex-fill">
-                <form method="post" action="likelogic.jsp" >
-                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
-            <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
-            <button class="btn btn-default" name="like"><strong><%= resultlike %>
-                <i class="fas fa-heart"></i>
-                Liked</strong>
-            </button></form>
+            <div class="flex-fill"><strong>
+                <button onclick="likePost(<%= imageId %>)"  class="btn btn-default" >
+                    
+                <span id="likes_<%= imageId %>">
+                    <i class='fas fa-heart mr-1'> </i> 
+                <%= resultlike %>
+                </span> Likes</button>
+               
+               
+                
+                            </strong>               
+                
+                
         </div>
         <%
         } else {
         %>
         <div class="flex-fill">
-                    <form method="post" action="likelogic.jsp" >
-                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
-            <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
-            <button class="btn btn-default" name="like"><%= resultlike %>
-                <i class="far fa-heart"></i>
-                Like
-            </button></form>
+                            <div>
+                <button onclick="likePost(<%= imageId %>)"  class="btn btn-default">
+                <span id="likes_<%= imageId %>">
+                    <i class='far fa-heart mr-1'> </i>
+                    <%= resultlike %>
+                </span> Likes</button>
+            </div>
+     
         </div>
         <%
         }
@@ -217,4 +222,22 @@
 %>
 
 </div>
+
+    <script>
+function likePost(postId) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log("Response Text:", xhr.responseText); // Add this line for debugging
+            var newLikeCount = xhr.responseText;
+            document.getElementById("likes_" + postId).innerHTML =newLikeCount;
+        }
+    };
+    xhr.open("POST", "like_handler.jsp", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("postId=" + postId);
+}
+
+    </script>
+
 <%@ include file="footer.jsp" %>
