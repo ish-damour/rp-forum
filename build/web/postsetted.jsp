@@ -1,5 +1,4 @@
 <%@ page import="java.io.*, java.sql.*" %>
-<%@ include file="connections.jsp" %>
 <div class="flex flex-column gap-4">
     <%
         try{
@@ -22,7 +21,7 @@
                 int imageId = resultSet.getInt("blog_id");
                 String imageName = resultSet.getString("image_name");
                 String imageDescription = resultSet.getString("image_data");
-                String likehas = resultSet.getString("likeshas");
+                String resultlike = resultSet.getString("likeshas");
                 String commenthas=resultSet.getString("likeshas"); 
              
                 String username = resultSet.getString("username");                
@@ -71,28 +70,42 @@
                   
             if(resultSetl.next()){
                 %>
-                  <div class="flex-fill">
-                      <form action="likelogic.jsp" method="post" ">           
-                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
-            <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
-                      <button class="btn btn-default" name="like"><strong><%=likehas%>
-                        <i class="fas fa-heart"></i>
-                        Liked</strong>
-            </button></form>
-        </div>                  
-                  <%  
-                      }else{
-                  %>
+
+            <div class="flex-fill"><strong>
+                <button onclick="likePost(<%= imageId %>)"  class="btn btn-default" >
+                    
+                <span id="likes_<%= imageId %>">
+                    <i class='fas fa-heart mr-1'> </i> 
+                <%= resultlike %>
+                </span> Likes</button>
+               
+               
+                
+                            </strong><div>
+
+            </div>                
+                
+                
+        </div>
+        <%
+        } else {
+        %>
         <div class="flex-fill">
-                    <form method="post" action="likelogic.jsp" >       
-                    <input type="text" value="<%=imageId%>" name="hiddenblogid" hidden>
-            <input type="hidden" name="previousPage" value="<%= request.getRequestURI() %>#target-anchor"">
-                      <button class="btn btn-default" name="like"><%=likehas%>
-                   <i class="far fa-heart"></i>
-                       Like           
-                      </button>
-                    </form>
-                     </div>               
+                            <div>
+                <button onclick="likePost(<%= imageId %>)"  class="btn btn-default">
+                <span id="likes_<%= imageId %>">
+                    <i class='far fa-heart mr-1'> </i>
+                    <%= resultlike %>
+                </span> Likes</button>
+            </div>
+                
+
+    
+                
+                
+                
+                
+        </div>              
                   <%    
                       }
                   %>

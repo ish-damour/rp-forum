@@ -35,8 +35,12 @@
 //    + "ORDER BY COALESCE(latest_modifiers.last_modified, blogs.created_at) DESC";
 
 
-String query="SELECT * FROM notify,users where notify.owner_id='" + loggedid + "' and notify.reacter_id=users.user_id ORDER  BY notify.created_at DESC";
-
+String queryi="SELECT * FROM notify,users where notify.owner_id='" + loggedid + "' and notify.reacter_id=users.user_id ORDER  BY notify.created_at DESC";
+String query="SELECT f.notify_id, f.owner_id, f.reacter_id, f.action, f.seen, f.created_at, u.username AS reacter_username, u.email AS reacter_email FROM notify f INNER JOIN users u ON f.reacter_id = u.user_id WHERE f.owner_id = '" + loggedid + "'UNION SELECT l.notify_id, l.owner_id, l.reacter_id, l.action, l.seen, l.created_at,"
++ " u.username AS reacter_username, u.email AS reacter_email FROM notifyblog l"
++ " INNER JOIN users u ON l.reacter_id = u.user_id INNER JOIN blogs b "
++ "ON l.owner_id = b.blog_id"
++ " WHERE b.user_id ='" + loggedid + "' ORDER BY created_at DESC;";
 
 
 
@@ -75,8 +79,10 @@ String query="SELECT * FROM notify,users where notify.owner_id='" + loggedid + "
       ResultSet  resultSet = statement.executeQuery(query);
         
         while (resultSet.next()) {
+            String blogd=resultSet.getString("owner_id");
             int notify_id = resultSet.getInt("notify_id");
-            String reacter_id = resultSet.getString("username");
+            String reacter_id = resultSet.getString("reacter_username");
+
             String action = resultSet.getString("action");
             int seen=resultSet.getInt("seen");
             String created_at=resultSet.getString("created_at");
@@ -122,8 +128,7 @@ if(action.equalsIgnoreCase("following")&& seen==0){
         <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
     </div>
     <div class="flex-grow-1">
-        <strong><span id="reacter_id"></span> Started Following  you! ushaka wamwishyura!</strong>
-        <i class="fas fa-smile"></i>
+        <strong><span id="reacter_id"><%=reacter_id%></span> </strong>Started Following  you! 4hours ago
     </div><form method="post">
     <button class="btn btn-outline-primary btn-sm t">follow</button>
     </form>
@@ -135,10 +140,10 @@ if(action.equalsIgnoreCase("following")&& seen==0){
 %>
 <a href="#"  style="text-decoration: none"class=""><div class="alert text-muted d-flex align-items-center py-0 rounded-0">
     <div class="mx-2">
-        <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
+        <!--<img src="getImage.jsp?id=" alt="" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">-->        
     </div>
     <div class="flex-grow-1">
-        <strong><span id="reacter_id"></span> Unfollowed you! ushaka wamwishyura!</strong>
+        <strong><span id="reacter_id"><%=reacter_id%></span> </strong>Unfollowed you! ushaka wamwishyura!
         <i class="fas fa-smile"></i>
     </div><form method="post">
     <button class="btn btn-outline-primary btn-sm t">follow</button>
@@ -172,9 +177,85 @@ if(action.equalsIgnoreCase("following")&& seen==0){
 
 
  <%   
+     }else if(action.equalsIgnoreCase("liked") && seen==0){
+   String path1="seen.jsp?notify="+notify_id;
+    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+
+      PreparedStatement q = conn.prepareStatement("SELECT * FROM blogs WHERE blog_id = ?");
+                        q.setString(1,blogd );
+                        ResultSet resultSeto = q.executeQuery();
+                        if(resultSeto.next()){
+                        int imageId = resultSeto.getInt("blog_id");
+            String imageName = resultSeto.getString("image_name");
+            String imageDescription = resultSeto.getString("image_data");  
+            int likeall=resultSeto.getInt("likeshas"); 
+            int lef=likeall-1;
+ %>
+<a href="<%=path1%>"  style="text-decoration: none"class="">
+<div  class="alert alert-secondary border-0 d-flex align-items-center py-0 my-1 rounded-0">
+    <div class="mx-2">
+        <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
+    </div>
+    <div class="flex-grow-1 ">
+        <span id="reacter_id"><strong> <%=reacter_id%></strong></span> and <%=lef%> others recently Liked your Post!
+        on 
+        <!--<i class="fas fa-smile"></i>-->
+    </div>
+       <%
+            
+if(!(imageName.equals(""))){
+           %>
+<!--<img src="getImage.jsp?id=" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">-->           
+            <div class="mx-2">
+        <img src="getImage.jsp?id=<%= imageId %>" class="mr-3 rounded-2" alt="<%= imageName %>" style="width: 50px; height: 50px;">
+    </div>            
+   
+          <% 
+           }
+           
+                        
+           }else{
+           
+ }
+       %>        
+
+</div></a>
+
+
+
+
+
+ <%   
+     }else if(action.equalsIgnoreCase("unlike") && seen==0){
+   String path1="seen.jsp?notify="+notify_id;
+    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+%>
+<a href="<%=path1%>"  style="text-decoration: none"class="">
+<div  class="alert alert-secondary border-0 d-flex align-items-center py-0 my-1 rounded-0">
+    <div class="mx-2">
+        <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
+    </div>
+    <div class="flex-grow-1 ">
+        <span id="reacter_id"><strong> <%=reacter_id%></strong></span> Unliked your Post!
+        on 
+        <!--<i class="fas fa-smile"></i>-->
+    </div>
+          <div class="mx-2">
+        <img src="img/rp-logo.jpg" class="mr-3 rounded-2" alt="Profile Image" style="width: 50px; height: 50px;">
+    </div>  
+    <!--<button type="submit" class="btn btn-outline-primary btn-sm ">Following</button>-->
+</div></a>
+
+
+
+
+
+ <%   
      }
              
-%>         
+%>
+            
+                     
                 
  <%
                 

@@ -55,13 +55,23 @@
                         if (resultSet.next()) {
                             int allLikes = resultSet.getInt("likeshas"); 
                             int addlike = allLikes + 1;
-                            
+                            int blogliked=resultSet.getInt("user_id");
                             PreparedStatement paddlike = conn.prepareStatement("UPDATE blogs SET likeshas = ? WHERE blog_id = ?");
                             paddlike.setInt(1, addlike);
                             paddlike.setString(2, blog_id);
                             int rowaffect = paddlike.executeUpdate();
                             
                             if (rowaffect > 0) {
+             PreparedStatement notifyme = conn.prepareStatement("INSERT INTO notifyblog (owner_id,reacter_id,action,seen) VALUES (?,?, ?, ?)");
+            notifyme.setString(1, blog_id);
+            notifyme.setInt(2, likedby_id);
+            notifyme.setString(3,"liked");
+            notifyme.setInt(4, 0);
+            if(blogliked==likedby_id){
+                 
+    }else{
+  notifyme.executeUpdate();
+    }
                    PreparedStatement mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
                                     mofierlike.setString(1,blog_id);
                             int affectedmodi = mofierlike.executeUpdate();
@@ -92,13 +102,24 @@
                         if (resultSet.next()) {
                             int allLikes = resultSet.getInt("likeshas"); 
                             int subtractlike = allLikes - 1;
-                            
+                            int blogliked=resultSet.getInt("user_id");
                             PreparedStatement paddlike = conn.prepareStatement("UPDATE blogs SET likeshas = ? WHERE blog_id = ?");
                             paddlike.setInt(1, subtractlike);
                             paddlike.setString(2, blog_id);
                             int rowaffect = paddlike.executeUpdate();
                             
                             if (rowaffect > 0) {
+                            
+             PreparedStatement notifyme = conn.prepareStatement("INSERT INTO notifyblog (owner_id,reacter_id,action,seen) VALUES (?,?, ?, ?)");
+            notifyme.setString(1, blog_id);
+            notifyme.setInt(2, likedby_id);
+            notifyme.setString(3,"unlike");
+            notifyme.setInt(4, 0);
+            if(blogliked==likedby_id){
+                 
+    }else{
+notifyme.executeUpdate();  
+    }                           
                                 String previousPage = request.getParameter("previousPage");
                                 if (previousPage != null) {
                      PreparedStatement mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
@@ -135,6 +156,7 @@
                 if (resultSet.next()) {
                     int allLikes = resultSet.getInt("likeshas");
                     int addLike = allLikes + 1;
+                    int blogliked=resultSet.getInt("user_id");
                     
                     // Update likes in blog table
                     PreparedStatement psUpdateLikes = conn.prepareStatement("UPDATE blogs SET likeshas = ? WHERE blog_id = ?");
@@ -143,9 +165,22 @@
                     int rowsAffected = psUpdateLikes.executeUpdate();
 
                     if (rowsAffected > 0) {
+                    
+             PreparedStatement notifyme = conn.prepareStatement("INSERT INTO notifyblog (owner_id,reacter_id,action,seen) VALUES (?,?, ?, ?)");
+            notifyme.setString(1, blog_id);
+            notifyme.setInt(2, likedby_id);
+            notifyme.setString(3,"liked");
+            notifyme.setInt(4, 0);
+            if(blogliked==likedby_id){
+                 
+    }else{
+  notifyme.executeUpdate();
+    }
+              
+                    
                       String previousPage = request.getParameter("previousPage");
                                 if (previousPage != null) {
-                     PreparedStatement mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
+                   PreparedStatement   mofierlike = conn.prepareStatement("INSERT INTO modifier (`blogid`) values (?) ");
                                     mofierlike.setString(1,blog_id);
                             int affectedmodi = mofierlike.executeUpdate();
                             session.setAttribute("blogliked",blog_id);

@@ -56,32 +56,45 @@
  <div class="nav-scroller py-1 mb-3">
     <nav class="nav nav-underline flex flex-row justify-content-around ">
       <a class="nav-item nav-link link-body-emphasis active " href="index.jsp"><i class="fas fa-home"></i></a>
-      <a class="nav-item nav-link link-body-emphasis" href="UsersList.jsp"><i class="fas fa-compass"></i>
-Explore</a>
-      <a class="nav-item nav-link link-body-emphasis" href="trending.jsp"><i class="fas fa-binoculars"></i>
-Trends</a>
+      <a class="nav-item nav-link link-body-emphasis" href="UsersList.jsp"><i class="fas fa-users"></i>
+</a>
+      <a class="nav-item nav-link link-body-emphasis" href="trending.jsp"><i class="fas fa-compass"></i>
+</a>
       <a class="nav-item nav-link link-body-emphasis" href="savedpage.jsp"><i class="fas fa-star-half-alt"></i>
-Saved</a> 
-      
+</a> 
+  
       
   <%      try{
 
           int loggedid = (int) session.getAttribute("loggedid");
 
-String query="SELECT count(seen) as seen FROM notify where owner_id='" + loggedid + "' and notify.seen=0";
+//String query="SELECT f.notify_id, f.owner_id, f.reacter_id, f.action, f.seen, f.created_at, u.username AS reacter_username, u.email AS reacter_email FROM notify f INNER JOIN users u ON f.reacter_id = u.user_id WHERE f.owner_id = '" + loggedid + "'UNION SELECT l.notify_id, l.owner_id, l.reacter_id, l.action, l.seen, l.created_at,"
+//+ " u.username AS reacter_username, u.email AS reacter_email FROM notifyblog l"
+//+ " INNER JOIN users u ON l.reacter_id = u.user_id INNER JOIN blogs b "
+//+ "ON l.owner_id = b.blog_id"
+//+ " WHERE b.user_id ='" + loggedid + "'";          
+          
+String query = "SELECT (SELECT COUNT(*) FROM notify WHERE owner_id = '" + loggedid + "' AND seen = 0) as notify_count, (SELECT COUNT(*) FROM notifyblog nb JOIN blogs b ON nb.owner_id = b.blog_id WHERE b.user_id = '" + loggedid + "' AND nb.seen = 0) as notifyblog_count;";
+
+
+// Execute this query and fetch the result
+
         Statement statement = conn.createStatement();
       ResultSet  resulSet = statement.executeQuery(query);
 
         if (resulSet.next()) {
         
       
-            int countseen = resulSet.getInt("seen");
+            int countseen = resulSet.getInt("notifyblog_count");
+            int countnotfyseen = resulSet.getInt("notify_count");
+            int allseen =countseen+countnotfyseen ;
               if(countseen>0){
                 %>
 <a class="nav-item nav-link link-body-emphasis position-relative" href="notification.jsp">
     <i class="fas fa-bell"></i>
     <strong class="translate-middle badge rounded-pill bg-danger">
-        <%=countseen%>
+        <%=allseen%>
+        <!--<sup>+</sup>-->
         <span class="visually-hidden">unread messages</span>
     </strong>
 </a>
@@ -89,7 +102,7 @@ String query="SELECT count(seen) as seen FROM notify where owner_id='" + loggedi
       <%               
       }else{
               %>
-        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-bell"></i></a> 
+        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-heart"></i></a> 
       <% 
       
       }
@@ -97,7 +110,7 @@ String query="SELECT count(seen) as seen FROM notify where owner_id='" + loggedi
 
 }else{
               %>
-        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-bell"></i></a> 
+        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-heart"></i></a> 
       <% 
 
       }
@@ -105,10 +118,12 @@ String query="SELECT count(seen) as seen FROM notify where owner_id='" + loggedi
         }catch(Exception e){ 
          out.print(e.getMessage());
         } 
-%>
+%>     
       
+
       
-      
+
+         
       
       
       

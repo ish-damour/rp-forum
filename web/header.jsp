@@ -36,6 +36,10 @@
 
 
     <style>
+        .badge {
+    min-width: 0px; /* Adjust as needed */
+}
+
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
