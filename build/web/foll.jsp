@@ -21,7 +21,7 @@
                     <%--<%@include file="userCard"%>--%>
     
     <!-- Right side: Follow/Unfollow button -->
-    <form method="post" action="followlogic.jsp">
+    <!--<form method="post" action="followlogic.jsp">-->
         <%
             // Check if the user is already following the person
             PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ? AND followed = ?");
@@ -30,14 +30,20 @@
             psSelectl.setInt(3, 1);  
             ResultSet resultSetl = psSelectl.executeQuery();
         
-            if (resultSetl.next()) {
+             if (resultSetl.next()) {
                 int followed_id = resultSetl.getInt("following_id");
         %>
             <div>
                 <!-- Unfollow button -->
                 <input type="hidden" value="<%= followed_id %>" name="followingidi">
-                <input type="hidden" name="prev" value="">
-                <button class="btn btn-sm btn-default text-center" type="submit" name="unfollow">Unfollow</button>
+                <!--<button class="btn btn-sm btn-secondary " type="submit" name="unfollow">following</button>-->
+                <!--<button class="btn btn-sm btn-secondary " type="submit" name="follow">Following</button>-->
+                            <button onclick="followuser(<%=followeduser  %>)"  class="btn btn-sm btn-outline-primary ">
+                <span id="follow_<%= followeduser %>">
+                    <!--<i class='far fa-heart mr-1'> </i>-->
+                    following
+                    <%--<%=  %>--%>
+                </span></button>                
             </div>
         <%
             } else {
@@ -45,12 +51,19 @@
             <div>
                 <!-- Follow button -->
                 <input type="hidden" value="<%=followeduser%>" name="followingidi">
-                <button class="btn btn-sm btn-default type="submit" name="follow">Follow</button>
+                <!--<button class="btn btn-sm btn-secondary " type="submit" name="follow">Follow</button>-->
+                <!--<button class="btn btn-sm btn-secondary " type="submit" name="follow">Follow</button>-->
+                            <button onclick="followuser(<%=followeduser  %>)"  class="btn btn-sm btn-outline-primary ">
+                <span id="follow_<%= followeduser %>">Follow
+                    <!--<i class='far fa-heart mr-1'> </i>-->
+                    <%--<%=  %>--%>
+                </span></button>
+                
             </div>
         <%
             }
         %>
-    </form>
+    <!--</form>-->
 
                     <%
                         }

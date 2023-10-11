@@ -1,4 +1,4 @@
-<%@ include file="connections.jsp" %>  
+
 <div class="row">
     <div class="col-lg-12 mb-2">
         <a href="createNewPost.jsp" class="btn block btn-secondary" style="width: 100%">
@@ -129,72 +129,98 @@
             </div> 
         </div>
             <hr><!-- comment -->
-            <h5 class="link-body-emphasis mb-1">Suggested users</h5>
-            
-            <div class="d-flex flex-column gap-3 justify-content-start">
-                 <%--<%@ include file="userCard.jsp"%>--%> 
-     <div class="col-md-8">
-        <div class="row justify-content-center"> 
-            <div class="col-lg-12 "> 
-               
+<div class="row gap-1 space-3 ">
+    <h5 class="link-body-emphasis mb-1 text-center">Suggested users</h5>
+    <%
+        try {
+            int logid = (int) session.getAttribute("loggedid");
+            PreparedStatement psSelect = conn.prepareStatement("SELECT * FROM users WHERE user_id != ? ");
+            psSelect.setInt(1, logid);
+            ResultSet resultSet = psSelect.executeQuery();
+int counter=0;
+            while (resultSet.next()) {
+               if (counter >= 3) {
+            break; // Stop displaying buttons after 3 rows
+        } 
+                String usernam = resultSet.getString("username");
+                int followeduser = resultSet.getInt("user_id");
 
-               <%
-               try {
-                   int logid = (int) session.getAttribute("loggedid");
- PreparedStatement psSelect = conn.prepareStatement("SELECT users.*, followers.* FROM users LEFT JOIN (SELECT following_id FROM followers WHERE followedby_id = ? AND followed = 0) followers ON users.user_id = followers.following_id WHERE users.user_id != ? OR followers.following_id IS NULL Limit 3");
+                PreparedStatement psSelectfollow = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ?");
+                psSelectfollow.setInt(1, followeduser);
+                psSelectfollow.setInt(2, logid);
+                ResultSet resultSetfollow = psSelectfollow.executeQuery();
 
-                   psSelect.setInt(1, logid);
-                   psSelect.setInt(2, logid);
-                   ResultSet resultSet = psSelect.executeQuery();
+                boolean isFollowed = resultSetfollow.next();
+    %>
+    <!--<form method="post" action="followlogic.jsp">-->
+        <%
+            PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ? AND followed = ? ");
+            psSelectl.setInt(1, followeduser);
+            psSelectl.setInt(2, logid);  
+            psSelectl.setInt(3, 1);  
+            ResultSet resultSetl = psSelectl.executeQuery();
 
-                   while (resultSet.next()) {
-                       String usernam = resultSet.getString("username");
-                       int followeduser = resultSet.getInt("user_id");
-                       
-                    %>
-                    <%--<%@include file="userCard"%>--%>
-<div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-2">
-    <div class="d-flex">
-        <!-- Left side: User image and username -->
-        <div class="mr-2">
-            <!-- User image -->
-            <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="40px" height="40px">
-        </div>
-
-        <a href="profile.jsp?id=<%= followeduser %>" class="mr-3 link btn">
-            <!-- Username -->
-            
-                <%= usernam %>      
-        </a>
-    </div>
-    <!-- Right side: Follow/Unfollow button -->
-    <form method="post" action="followlogic.jsp">
-            <div>
-                <!-- Follow button -->
-                <input type="hidden" value="<%=followeduser%>" name="followingidi">
-                <button class="btn btn-sm btn-secondary" type="submit" name="follow">Follow</button>
+            if (resultSetl.next()) {
+                int followed_id = resultSetl.getInt("following_id");
+            } else {
+        %>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center ">
+                <div  class="mx-3">
+                    <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="30px" height="30px">
+                </div>
+                <div class="mr-3">
+                    <%= usernam %> 
+                </div>
             </div>
+            <div class="flex-shrink-0">
+                <input type="hidden" value="<%=followeduser%>" name="followingidi">
+                <!--<button class="btn btn-sm btn-secondary" type="submit" name="follow">Follow</button>-->
+             <button onclick="followuser(<%=followeduser  %>)"  class="btn btn-sm btn-outline-primary ">
+                <span id="follow_<%= followeduser %>">Follow
+                    <!--<i class='far fa-heart mr-1'> </i>-->
+                    <%--<%=  %>--%>
+                </span></button>
+            </div>
+        </div>
+        <%
+        counter ++;
+            }
+        %>
+    <!--</form>-->
+    <%
+        resultSetfollow.close();
+        
+    }
 
-    </form>
+    resultSet.close();
+    psSelect.close();
+    } catch (Exception e) {
+        out.print(e);
+    }
+    %>                 
 </div>
 
-                    <%
-                        }
 
-                        resultSet.close();
-                        psSelect.close();
-                    } catch (Exception e) {
-                        out.print(e);
-                    }
-                    %>
 
-        </div> 
-        </div> 
-    </div>                
-                 
-            
-            </div>
-            
+            <hr><!-- comment -->            
+
+                        <script>
+function followuser(followid) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+//            console.log("Response Text:", xhr.responseText); // Add this line for debugging
+            var newfollow = xhr.responseText;
+            document.getElementById("follow_" + followid).innerHTML =newfollow;
+        }
+    };
+    xhr.open("POST", "follow_handler.jsp", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("followid=" + followid);
+}
+
+    </script> 
             <%@ include file="footer.jsp" %>
        
 

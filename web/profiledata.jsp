@@ -1,5 +1,4 @@
 <%@ page import="java.io.*, java.sql.*" %>
-<%@ include file="connections.jsp" %>
 <div class="flex flex-column gap-4">
 <%
                           String bloggetted = (String) session.getAttribute("blogliked");

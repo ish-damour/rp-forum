@@ -56,7 +56,7 @@
  <div class="nav-scroller py-1 mb-3">
     <nav class="nav nav-underline flex flex-row justify-content-around ">
       <a class="nav-item nav-link link-body-emphasis active " href="index.jsp"><i class="fas fa-home"></i></a>
-      <a class="nav-item nav-link link-body-emphasis" href="UsersList.jsp"><i class="fas fa-users"></i>
+      <a class="nav-item nav-link link-body-emphasis" href="users.jsp"><i class="fas fa-users"></i>
 </a>
       <a class="nav-item nav-link link-body-emphasis" href="trending.jsp"><i class="fas fa-compass"></i>
 </a>
@@ -88,7 +88,7 @@ String query = "SELECT (SELECT COUNT(*) FROM notify WHERE owner_id = '" + logged
             int countseen = resulSet.getInt("notifyblog_count");
             int countnotfyseen = resulSet.getInt("notify_count");
             int allseen =countseen+countnotfyseen ;
-              if(countseen>0){
+              if(allseen>0){
                 %>
 <a class="nav-item nav-link link-body-emphasis position-relative" href="notification.jsp">
     <i class="fas fa-bell"></i>
@@ -102,7 +102,7 @@ String query = "SELECT (SELECT COUNT(*) FROM notify WHERE owner_id = '" + logged
       <%               
       }else{
               %>
-        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-heart"></i></a> 
+        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-bell"></i></a> 
       <% 
       
       }
@@ -110,7 +110,7 @@ String query = "SELECT (SELECT COUNT(*) FROM notify WHERE owner_id = '" + logged
 
 }else{
               %>
-        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-heart"></i></a> 
+        <a class="nav-item nav-link link-body-emphasis" href="notification.jsp"><i class="far fa-bell"></i></a> 
       <% 
 
       }

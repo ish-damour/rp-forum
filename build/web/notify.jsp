@@ -107,7 +107,7 @@ if(action.equalsIgnoreCase("following")&& seen==0){
    String path1="seen.jsp?notify="+notify_id;
 %>
 <a href="<%=path1%>"  style="text-decoration: none"class="">
-<div  class="alert alert-secondary border-0 d-flex align-items-center py-0 my-1 rounded-0">
+<div  class="alert  border-0 d-flex align-items-center py-0 my-1 rounded-0">
     <div class="mx-2">
         <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
     </div>
@@ -121,7 +121,7 @@ if(action.equalsIgnoreCase("following")&& seen==0){
  <% 
      }else if(action.equalsIgnoreCase("following")&& seen==1){
  String path1="seen.jsp?notify="+notify_id;
-    String ge = "<p class='alert alert-secondary text-muted'><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+    String ge = "<p class='alert text-muted'><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
 %>
 <a href="#"  style="text-decoration: none"class=""><div class="alert text-muted d-flex align-items-center py-0 rounded-0">
     <div class="mx-2">
@@ -136,7 +136,7 @@ if(action.equalsIgnoreCase("following")&& seen==0){
  <% 
       }else if(action.equalsIgnoreCase("unfollowed") && seen==1){
  String path1="seen.jsp?notify="+notify_id;
-    String ge = "<p class='alert alert-secondary text-muted'><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+    String ge = "<p class='alert  text-muted'><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
 %>
 <a href="#"  style="text-decoration: none"class=""><div class="alert text-muted d-flex align-items-center py-0 rounded-0">
     <div class="mx-2">
@@ -157,10 +157,10 @@ if(action.equalsIgnoreCase("following")&& seen==0){
  <%   
      }else if(action.equalsIgnoreCase("unfollowed") && seen==0){
    String path1="seen.jsp?notify="+notify_id;
-    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+//    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
 %>
 <a href="<%=path1%>"  style="text-decoration: none"class="">
-<div  class="alert alert-secondary border-0 d-flex align-items-center py-0 my-1 rounded-0">
+<div  class="alert border-0 d-flex align-items-center py-0 my-1 rounded-0">
     <div class="mx-2">
         <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
     </div>
@@ -178,8 +178,8 @@ if(action.equalsIgnoreCase("following")&& seen==0){
 
  <%   
      }else if(action.equalsIgnoreCase("liked") && seen==0){
-   String path1="seen.jsp?notify="+notify_id;
-    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+//    String path1="seenlike.jsp?notify="+notify_id;
+//    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
 
       PreparedStatement q = conn.prepareStatement("SELECT * FROM blogs WHERE blog_id = ?");
                         q.setString(1,blogd );
@@ -190,9 +190,10 @@ if(action.equalsIgnoreCase("following")&& seen==0){
             String imageDescription = resultSeto.getString("image_data");  
             int likeall=resultSeto.getInt("likeshas"); 
             int lef=likeall-1;
+String path1="seenlike.jsp?notify="+notify_id+"&blogged=" +blogd;
  %>
 <a href="<%=path1%>"  style="text-decoration: none"class="">
-<div  class="alert alert-secondary border-0 d-flex align-items-center py-0 my-1 rounded-0">
+<div  class="alert  border-0 d-flex align-items-center py-0 my-1 rounded-0">
     <div class="mx-2">
         <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
     </div>
@@ -207,7 +208,7 @@ if(!(imageName.equals(""))){
            %>
 <!--<img src="getImage.jsp?id=" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">-->           
             <div class="mx-2">
-        <img src="getImage.jsp?id=<%= imageId %>" class="mr-3 rounded-2" alt="<%= imageName %>" style="width: 50px; height: 50px;">
+        <img src="getImage.jsp?id=<%= imageId %>" class="mr-3" alt="<%= imageName %>" style="width: 50px; height: 50px;">
     </div>            
    
           <% 
@@ -227,23 +228,149 @@ if(!(imageName.equals(""))){
 
  <%   
      }else if(action.equalsIgnoreCase("unlike") && seen==0){
-   String path1="seen.jsp?notify="+notify_id;
-    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
-%>
+ 
+//    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+
+      PreparedStatement q = conn.prepareStatement("SELECT * FROM blogs WHERE blog_id = ?");
+                        q.setString(1,blogd );
+                        ResultSet resultSeto = q.executeQuery();
+                        if(resultSeto.next()){
+                        int imageId = resultSeto.getInt("blog_id");
+            String imageName = resultSeto.getString("image_name");
+            String imageDescription = resultSeto.getString("image_data");  
+            int likeall=resultSeto.getInt("likeshas"); 
+            int lef=likeall-1; 
+String path1="seenlike.jsp?notify="+notify_id+"&blogged=" +blogd;
+// String urled = "updateform.jsp?id=" + id + "&fname=" + fname+
+//                 "&lname=" + lname+ "&email=" + email+ "&province=" + province+
+//                 "&dob=" + dob+ "&gender=" + gender; 
+ %>
 <a href="<%=path1%>"  style="text-decoration: none"class="">
-<div  class="alert alert-secondary border-0 d-flex align-items-center py-0 my-1 rounded-0">
+    <div class="alert  d-flex align-items-center py-0 rounded-0">
+    <div class="mx-2">
+        <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
+    </div>
+    <div class="flex-grow-1">
+        <strong><span id="reacter_id"><%=reacter_id%></span> </strong> unliked you post! <small>4hours ago</small>
+    </div>
+       <%
+            
+if(!(imageName.equals(""))){
+           %>
+<!--<img src="getImage.jsp?id=" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">-->           
+            <div class="mx-2">
+        <img src="getImage.jsp?id=<%= imageId %>" class="mr-3" alt="<%= imageName %>" style="width: 50px; height: 50px;">
+    </div>            
+   
+          <% 
+           }
+           
+                        
+           }else{
+           
+ }
+       %>        
+
+</div></a>
+
+
+
+
+
+ <%   
+      }else if(action.equalsIgnoreCase("unlike") && seen==1){
+//   String path1="seenlike.jsp?notify="+notify_id;
+//    String ge = "<p class='alert border-0 '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+
+      PreparedStatement q = conn.prepareStatement("SELECT * FROM blogs WHERE blog_id = ?");
+                        q.setString(1,blogd );
+                        ResultSet resultSeto = q.executeQuery();
+                        if(resultSeto.next()){
+                        int imageId = resultSeto.getInt("blog_id");
+            String imageName = resultSeto.getString("image_name");
+            String imageDescription = resultSeto.getString("image_data");  
+            int likeall=resultSeto.getInt("likeshas"); 
+            int lef=likeall-1;
+String path1="seenlike.jsp?notify="+notify_id+"&blogged=" +blogd;
+ %>
+<a href="<%=path1%>"  style="text-decoration: none;"class="">
+<div  class="alert  text-muted border-0 d-flex align-items-center py-0 my-1 rounded-0">
     <div class="mx-2">
         <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
     </div>
     <div class="flex-grow-1 ">
-        <span id="reacter_id"><strong> <%=reacter_id%></strong></span> Unliked your Post!
+        <span id="reacter_id"><strong> <%=reacter_id%></strong></span> Recently unLiked your Post
+        <small>4 days ago</small> 
+        <!--<i class="fas fa-smile"></i>-->
+    </div>
+       <%
+            
+if(!(imageName.equals(""))){
+           %>
+<!--<img src="getImage.jsp?id=" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">-->           
+            <div class="mx-2">
+        <img src="getImage.jsp?id=<%= imageId %>" class="mr-3 " alt="<%= imageName %>" style="width: 50px; height: 50px;">
+    </div>            
+   
+          <% 
+           }
+           
+                        
+           }else{
+           
+ }
+       %>        
+
+</div></a>
+
+
+
+
+
+ <%   
+      }else if(action.equalsIgnoreCase("liked") && seen==1){
+//    String path1="seenlike.jsp?notify="+notify_id;
+//    String ge = "<p class='alert border-0 alert-secondary '><strong>"+reacter_id+"  Unfollowed you! ushaka wamwishyura!</strong><i class='fas fa-smile'></i   ></p>";
+
+      PreparedStatement q = conn.prepareStatement("SELECT * FROM blogs WHERE blog_id = ?");
+                        q.setString(1,blogd );
+                        ResultSet resultSeto = q.executeQuery();
+                        if(resultSeto.next()){
+                        int imageId = resultSeto.getInt("blog_id");
+            String imageName = resultSeto.getString("image_name");
+            String imageDescription = resultSeto.getString("image_data");  
+            int likeall=resultSeto.getInt("likeshas"); 
+            int lef=likeall-1;
+String path1="seenlike.jsp?notify="+notify_id+"&blogged=" +blogd;
+ %>
+<a href="<%=path1%>"  style="text-decoration: none"class="">
+<div  class="alert  text-muted border-0 d-flex align-items-center py-0 my-1 rounded-0">
+    <div class="mx-2">
+        <img src="img/rp-logo.jpg" class="mr-3 rounded-5" alt="Profile Image" style="width: 50px; height: 50px;">
+    </div>
+    <div class="flex-grow-1 ">
+        <span id="reacter_id"><strong> <%=reacter_id%></strong></span> and <%=lef%> others recently Liked your Post!
         on 
         <!--<i class="fas fa-smile"></i>-->
     </div>
-          <div class="mx-2">
-        <img src="img/rp-logo.jpg" class="mr-3 rounded-2" alt="Profile Image" style="width: 50px; height: 50px;">
-    </div>  
-    <!--<button type="submit" class="btn btn-outline-primary btn-sm ">Following</button>-->
+       <%
+            
+if(!(imageName.equals(""))){
+           %>
+<!--<img src="getImage.jsp?id=" class="mg img-thumbnail border-0 border-none " style="min-width: 100%">-->           
+            <div class="mx-2">
+        <img src="getImage.jsp?id=<%= imageId %>" class="mr-3" alt="<%= imageName %>" style="width: 50px; height: 50px;">
+    </div>            
+   
+          <% 
+           }
+           
+                        
+           }else{
+           
+ }
+       %>        
+
 </div></a>
 
 
@@ -261,12 +388,12 @@ if(!(imageName.equals(""))){
                 
 
        }
-if(resultSet.next()){
-
-}else{
- String ge = "<p class='alert border-0 alert-secondary text-center'><strong>Continue by Following your intrested in expole and post your blogs to enjoy!!</strong></p>";
-out.print(ge);
-}
+//if(resultSet.next()){
+//
+//}else{
+// String ge = "<p class='alert border-0 alert-secondary text-center'><strong>Continue by Following your intrested in expole and post your blogs to enjoy!!</strong></p>";
+//out.print(ge);
+//}
     
         }catch(Exception e){ 
          out.print(e.getMessage());

@@ -134,7 +134,7 @@ int counter=0;
 
                 boolean isFollowed = resultSetfollow.next();
     %>
-    <form method="post" action="followlogic.jsp">
+    <!--<form method="post" action="followlogic.jsp">-->
         <%
             PreparedStatement psSelectl = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ? AND followed = ? ");
             psSelectl.setInt(1, followeduser);
@@ -157,14 +157,19 @@ int counter=0;
             </div>
             <div class="flex-shrink-0">
                 <input type="hidden" value="<%=followeduser%>" name="followingidi">
-                <button class="btn btn-sm btn-secondary" type="submit" name="follow">Follow</button>
+                <!--<button class="btn btn-sm btn-secondary" type="submit" name="follow">Follow</button>-->
+             <button onclick="followuser(<%=followeduser  %>)"  class="btn btn-sm btn-outline-primary ">
+                <span id="follow_<%= followeduser %>">Follow
+                    <!--<i class='far fa-heart mr-1'> </i>-->
+                    <%--<%=  %>--%>
+                </span></button>
             </div>
         </div>
         <%
         counter ++;
             }
         %>
-    </form>
+    <!--</form>-->
     <%
         resultSetfollow.close();
         
@@ -180,7 +185,22 @@ int counter=0;
 
             <hr><!-- comment -->            
 
-            
+                        <script>
+function followuser(followid) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+//            console.log("Response Text:", xhr.responseText); // Add this line for debugging
+            var newfollow = xhr.responseText;
+            document.getElementById("follow_" + followid).innerHTML =newfollow;
+        }
+    };
+    xhr.open("POST", "follow_handler.jsp", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("followid=" + followid);
+}
+
+    </script>   
             <%@ include file="footer.jsp" %>
        
 

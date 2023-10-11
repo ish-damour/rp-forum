@@ -1,16 +1,27 @@
+<%@include file="loginblocker.jsp" %>  
+<%@ include file= "header.jsp"%>
+<%@ include file= "nav.jsp"%>
+  <main class="container"> 
+  <div class="row justify-content-center">  
+      <div class="col-lg-4">
+          <%@ include file="starterProfile.jsp"%>
 
+      </div>
+    <div class="col-md-8">
+        <div class="row justify-content-center"> 
+            <div class="col-lg-12 "> 
+               
 
                <%
                try {
                    int logid = (int) session.getAttribute("loggedid");
-                   String gido=request.getParameter("id");
-                   PreparedStatement psSelect = conn.prepareStatement("SELECT * FROM users WHERE user_id = ?");
-                   psSelect.setString(1, gido);
-                   ResultSet resultSeti = psSelect.executeQuery();
+                   PreparedStatement psSelect = conn.prepareStatement("SELECT * FROM users WHERE user_id != ?");
+                   psSelect.setInt(1, logid);
+                   ResultSet resultSet = psSelect.executeQuery();
 
-                   while (resultSeti.next()) {
-                       String usernam = resultSeti.getString("username");
-                       int followeduser = resultSeti.getInt("user_id");
+                   while (resultSet.next()) {
+                       String usernam = resultSet.getString("username");
+                       int followeduser = resultSet.getInt("user_id");
 
                        PreparedStatement psSelectfollow = conn.prepareStatement("SELECT * FROM followers WHERE following_id = ? AND followedby_id = ?");
                        psSelectfollow.setInt(1, followeduser);
@@ -19,6 +30,18 @@
 
                     %>
                     <%--<%@include file="userCard"%>--%>
+<div class="d-flex flex-row justify-content-between align-items-center mt-3 mb-2">
+    <div class="d-flex">
+        <!-- Left side: User image and username -->
+        <div class="mr-2">
+            <!-- User image -->
+            <img class="link-secondary" style="border-radius: 50%" src="img/rp-logo.jpg" width="40px" height="40px">
+        </div>
+        <div class="mr-3">
+            <!-- Username -->
+            <%= usernam %>
+        </div>
+    </div>
     
     <!-- Right side: Follow/Unfollow button -->
     <!--<form method="post" action="followlogic.jsp">-->
@@ -30,7 +53,7 @@
             psSelectl.setInt(3, 1);  
             ResultSet resultSetl = psSelectl.executeQuery();
         
-             if (resultSetl.next()) {
+            if (resultSetl.next()) {
                 int followed_id = resultSetl.getInt("following_id");
         %>
             <div>
@@ -64,13 +87,36 @@
             }
         %>
     <!--</form>-->
+</div>
 
                     <%
                         }
 
-                        resultSeti.close();
+                        resultSet.close();
                         psSelect.close();
                     } catch (Exception e) {
                         out.print(e);
                     }
                     %>
+
+        </div> 
+        </div> 
+    </div>
+  </div>
+</main> 
+                        <script>
+function followuser(followid) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+//            console.log("Response Text:", xhr.responseText); // Add this line for debugging
+            var newfollow = xhr.responseText;
+            document.getElementById("follow_" + followid).innerHTML =newfollow;
+        }
+    };
+    xhr.open("POST", "follow_handler.jsp", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("followid=" + followid);
+}
+
+    </script>
